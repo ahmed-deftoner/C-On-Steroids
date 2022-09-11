@@ -1,5 +1,5 @@
 run: main.out
 	./main.out input.cos
 
-main.o: main.cpp
+main.out: main.cpp
 	g++ -o main.out main.cpp
