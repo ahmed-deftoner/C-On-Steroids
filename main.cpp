@@ -4,6 +4,19 @@
 #include <vector>
 using namespace std;
 
+vector<string> raw;
+
+static void lex(){
+    for (auto item : raw) {
+        for (int j = 0; j < item.length(); ++j){
+            if(item[j]==' ' || item[j]=='\t')
+                continue;
+            else if(item[j]=='\n')
+                break;
+        }
+    }
+}
+
 int main(int argc, char *argv[]){
     if(argc != 2){
         cout << "Not enough arguments \n";
@@ -11,7 +24,6 @@ int main(int argc, char *argv[]){
     }
     fstream file;
     string fileName = argv[1];
-    vector<string> lines;
     string line;
     int pos = fileName.find(".");
     string sub = fileName.substr(pos + 1);
@@ -22,11 +34,11 @@ int main(int argc, char *argv[]){
     file.open(argv[1], ios::in);
     if (file.is_open()) {
         while ( getline (file, line) ) {
-             lines.push_back(line);
+             raw.push_back(line);
         }
         file.close();
     }
-    for(auto it = lines.begin(); it != lines.end(); it++){
+    for(auto it = raw.begin(); it != raw.end(); it++){
         cout<<*it<<endl;
     }
     return 0;
