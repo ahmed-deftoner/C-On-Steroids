@@ -4,6 +4,38 @@
 #include <vector>
 using namespace std;
 
+#define TOKEN_IDENTIFIER "I"
+#define TOKEN_NUMBER "N"
+#define TOKEN_VARIABLE "V"
+#define TOKEN_FUNCTION "F"
+#define TOKEN_INT "n"
+#define TOKEN_IF "i"
+#define TOKEN_ELSE "e"
+#define TOKEN_DO "d"
+#define TOKEN_UNTIL "u"
+#define TOKEN_THEN "t"
+#define TOKEN_READ "r"
+#define TOKEN_DISPLAY "d"
+#define TOKEN_DISPLAYLINE "D"
+#define TOKEN_RETURN "R"
+#define TOKEN_EQUAL "="
+#define TOKEN_NOTEQUAL "!="
+#define TOKEN_LESS "<"
+#define TOKEN_LESSEQUAL "<="
+#define TOKEN_GREATER ">"
+#define TOKEN_GREATEREQUAL ">="
+#define TOKEN_COMMA ","
+#define TOKEN_COLON ":"
+#define TOKEN_SEMICOLON ";"
+#define TOKEN_DOLLAR "$"
+#define TOKEN_OPENPARANTHESIS "("
+#define TOKEN_CLOSEPARANTHESIS ")"
+#define TOKEN_PLUS "+"
+#define TOKEN_MINUS "-"
+#define TOKEN_DIVIDE "/"
+#define TOKEN_MULTIPLY "*"
+#define TOKEN_MODULUS "%"
+
 vector<string> raw;
 
 static void lex(){
