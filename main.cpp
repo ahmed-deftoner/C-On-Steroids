@@ -16,10 +16,12 @@ int main(int argc, char *argv[]){
     string fileName = argv[1];
     vector<string> lines;
     string line;
-   /* if(!!strncmp(strchr(fileName,'.'),".cos")){
+    int pos = fileName.find(".");
+    string sub = fileName.substr(pos + 1);
+    if(sub != "cos"){
         cout << "File must be .cos extension!\n";
         return 2;
-    }*/
+    }
     file.open(argv[1], ios::in);
     if (file.is_open()) {
         while ( getline (file, line) ) {
