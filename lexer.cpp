@@ -34,6 +34,18 @@ void lexer::Tokenize()//function that tokenizes your input stream
 {
     vector<char>::iterator it = stream.begin();
 	//your implementation goes here
+    int line = 1;
+    while(it != stream.end())
+    {
+        /* Skip whitespace.  */
+        if (*it == ' ' || *it == '\t' || *it == '\n') {
+            if (*it++ == '\n')
+                ++line;
+        }
+        ++it;
+    }
+    cout<<line<<endl;
+    
 	//push_back EOF token at end to identify End of File
     tokens.push_back(token(string(""), TokenType::END_OF_FILE));
 }
