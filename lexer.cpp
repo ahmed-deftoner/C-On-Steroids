@@ -49,8 +49,8 @@ void lexer::Tokenize()//function that tokenizes your input stream
             if (*it++ == '\n')
                 ++line;
         }
-        // Identifier
-        if (isalpha(*it) || *it == '_'){
+        // Identifier or variable or keyword
+        if (isalpha(*it) || *it == '_' || *it == '$'){
             size_t i, len;
             string identifier;
             identifier.push_back(*it);
@@ -86,6 +86,8 @@ void lexer::Tokenize()//function that tokenizes your input stream
                 tokens.push_back(token(identifier,TokenType::TOKEN_DISPLAYLINE));
             else if (identifier.compare("return"))
                 tokens.push_back(token(identifier,TokenType::TOKEN_RETURN));
+            else if (identifier[0] == '$')
+                tokens.push_back(token(identifier,TokenType::TOKEN_VARIABLE));
             tokens.push_back(token(identifier,TokenType::TOKEN_IDENTIFIER));
         }
         ++it;
