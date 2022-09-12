@@ -5,7 +5,7 @@
 using namespace std;
 
 #define TOKEN_IDENTIFIER "I"
-#define TOKEN_NUMBER "N"
+#define TOKEN_NUMBER  "N"
 #define TOKEN_VARIABLE "V"
 #define TOKEN_FUNCTION "F"
 #define TOKEN_INT "n"
