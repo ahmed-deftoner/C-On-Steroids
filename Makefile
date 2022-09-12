@@ -2,6 +2,9 @@ EXEC = a.out
 CC = g++
 OBJ = lexer.o main.o parser.o
 
+run : $(EXEC)
+	./$(EXEC) sample_code.ol
+
 $(EXEC) : $(OBJ)
 	$(CC) $(OBJ) -o $(EXEC) -lm
 

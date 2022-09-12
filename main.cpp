@@ -8,6 +8,7 @@ int main(int argc, char* argv[])
 	if (argc == 2)
 	{
 		lexer _lexer(argv[1]);
+		_lexer.printRaw();
 		token t;
 		t = _lexer.getNextToken();
 		while (t.tokenType != TokenType::END_OF_FILE)
