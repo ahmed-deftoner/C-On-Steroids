@@ -30,6 +30,13 @@ void lexer::setCurrentPointer(int pos)
     else
         index = 0;
 }
+
+bool isAlphabet(char &x){
+    if ((x >= 'a' && x <= 'z') || (x >= 'A' && x <= 'Z'))
+        return true;
+    return false;
+}
+
 void lexer::Tokenize()//function that tokenizes your input stream
 {
     vector<char>::iterator it = stream.begin();
@@ -42,6 +49,8 @@ void lexer::Tokenize()//function that tokenizes your input stream
             if (*it++ == '\n')
                 ++line;
         }
+        if (isAlphabet(*it) || *it == '_')
+		    return ident();
         ++it;
     }
     cout<<line<<endl;
