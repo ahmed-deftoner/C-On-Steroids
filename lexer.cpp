@@ -49,6 +49,7 @@ void lexer::Tokenize()//function that tokenizes your input stream
             if (*it++ == '\n')
                 ++line;
         }
+        // Identifier
         if (isalpha(*it) || *it == '_'){
             size_t i, len;
             string identifier;
@@ -62,39 +63,30 @@ void lexer::Tokenize()//function that tokenizes your input stream
             len = it - p;
 
             --it;
-            tokens.push_back(new token())
 
-            if ((token = malloc(len + 1)) == NULL)
-                error("malloc failed");
-
-            for (i = 0; i < len; i++)
-                token[i] = *p++;
-            token[i] = '\0';
-
-            if ()
-                return TOK_CONST;
-            else if (!strcmp(token, "var"))
-                return TOK_VAR;
-            else if (!strcmp(token, "procedure"))
-                return TOK_PROCEDURE;
-            else if (!strcmp(token, "call"))
-                return TOK_CALL;
-            else if (!strcmp(token, "begin"))
-                return TOK_BEGIN;
-            else if (!strcmp(token, "end"))
-                return TOK_END;
-            else if (!strcmp(token, "if"))
-                return TOK_IF;
-            else if (!strcmp(token, "then"))
-                return TOK_THEN;
-            else if (!strcmp(token, "while"))
-                return TOK_WHILE;
-            else if (!strcmp(token, "do"))
-                return TOK_DO;
-            else if (!strcmp(token, "odd"))
-                return TOK_ODD;
-
-            return TOK_IDENT;
+            if (identifier.compare("function"))
+                tokens.push_back(token(identifier,TokenType::TOKEN_FUNCTION));
+            else if (identifier.compare("int"))
+                tokens.push_back(token(identifier,TokenType::TOKEN_INT));
+            else if (identifier.compare("if"))
+                tokens.push_back(token(identifier,TokenType::TOKEN_IF));
+            else if (identifier.compare("else"))
+                tokens.push_back(token(identifier,TokenType::TOKEN_ELSE));
+            else if (identifier.compare("do"))
+                tokens.push_back(token(identifier,TokenType::TOKEN_DO));
+            else if (identifier.compare("until"))
+                tokens.push_back(token(identifier,TokenType::TOKEN_UNTIL));
+            else if (identifier.compare("then"))
+                tokens.push_back(token(identifier,TokenType::TOKEN_THEN));
+            else if (identifier.compare("read"))
+                tokens.push_back(token(identifier,TokenType::TOKEN_READ));
+            else if (identifier.compare("display"))
+                tokens.push_back(token(identifier,TokenType::TOKEN_DISPLAY));
+            else if (identifier.compare("displayline"))
+                tokens.push_back(token(identifier,TokenType::TOKEN_DISPLAYLINE));
+            else if (identifier.compare("return"))
+                tokens.push_back(token(identifier,TokenType::TOKEN_RETURN));
+            tokens.push_back(token(identifier,TokenType::TOKEN_IDENTIFIER));
         }
         ++it;
     }
