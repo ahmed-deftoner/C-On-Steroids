@@ -49,8 +49,53 @@ void lexer::Tokenize()//function that tokenizes your input stream
             if (*it++ == '\n')
                 ++line;
         }
-        if (isAlphabet(*it) || *it == '_')
-		    return ident();
+        if (isalpha(*it) || *it == '_'){
+            size_t i, len;
+            string identifier;
+            identifier.push_back(*it);
+            vector<char>::iterator p = it;
+            while (isdigit(*it) || isalpha(*it) || *it == '_'){
+                ++it;
+                identifier.push_back(*it);
+            }
+
+            len = it - p;
+
+            --it;
+            tokens.push_back(new token())
+
+            if ((token = malloc(len + 1)) == NULL)
+                error("malloc failed");
+
+            for (i = 0; i < len; i++)
+                token[i] = *p++;
+            token[i] = '\0';
+
+            if ()
+                return TOK_CONST;
+            else if (!strcmp(token, "var"))
+                return TOK_VAR;
+            else if (!strcmp(token, "procedure"))
+                return TOK_PROCEDURE;
+            else if (!strcmp(token, "call"))
+                return TOK_CALL;
+            else if (!strcmp(token, "begin"))
+                return TOK_BEGIN;
+            else if (!strcmp(token, "end"))
+                return TOK_END;
+            else if (!strcmp(token, "if"))
+                return TOK_IF;
+            else if (!strcmp(token, "then"))
+                return TOK_THEN;
+            else if (!strcmp(token, "while"))
+                return TOK_WHILE;
+            else if (!strcmp(token, "do"))
+                return TOK_DO;
+            else if (!strcmp(token, "odd"))
+                return TOK_ODD;
+
+            return TOK_IDENT;
+        }
         ++it;
     }
     cout<<line<<endl;
