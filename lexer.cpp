@@ -2,7 +2,38 @@
 using namespace std;
 //for printing tokens names, Same as the enum defined in lexer.h
 string reserved[] = {
-    "END_OF_FILE"
+    "END_OF_FILE",
+    "TOKEN_IDENTIFIER",
+ 	"TOKEN_NUMBER",
+ 	"TOKEN_VARIABLE",
+ 	"TOKEN_FUNCTION",
+ 	"TOKEN_INT",
+ 	"TOKEN_IF",
+ 	"TOKEN_ELSE",
+ 	"TOKEN_DO",
+ 	"TOKEN_UNTIL",
+ 	"TOKEN_THEN",
+ 	"TOKEN_READ",
+ 	"TOKEN_DISPLAY",
+ 	"TOKEN_DISPLAYLINE",
+ 	"TOKEN_RETURN",
+ 	"TOKEN_EQUAL",
+ 	"TOKEN_NOTEQUAL",
+ 	"TOKEN_LESS",
+ 	"TOKEN_LESSEQUAL",
+ 	"TOKEN_GREATER",
+ 	"TOKEN_GREATEREQUAL",
+ 	"TOKEN_COMMA",
+ 	"TOKEN_COLON",
+ 	"TOKEN_SEMICOLON",
+ 	"TOKEN_DOLLAR",
+ 	"TOKEN_OPENPARANTHESIS",
+ 	"TOKEN_CLOSEPARANTHESIS",
+ 	"TOKEN_PLUS",
+ 	"TOKEN_MINUS",
+ 	"TOKEN_DIVIDE", 
+ 	"TOKEN_MULTIPLY",
+ 	"TOKEN_MODULUS",
 	};
 token::token()
 {
@@ -49,20 +80,20 @@ void lexer::Tokenize()//function that tokenizes your input stream
             if (*it++ == '\n')
                 ++line;
         }
+        //cout<<"o\n";
         // Identifier or variable or keyword
         if (isalpha(*it) || *it == '_' || *it == '$'){
+            //cout<<"i\n";
             size_t i, len;
             string identifier;
             identifier.push_back(*it);
-            vector<char>::iterator p = it;
             while (isdigit(*it) || isalpha(*it) || *it == '_'){
                 ++it;
                 identifier.push_back(*it);
+               // cout<<"ii\n";
             }
-
-            len = it - p;
-
-            --it;
+           // identifier.pop_back();
+            cout<<identifier<<endl;
 
             if (identifier.compare("function"))
                 tokens.push_back(token(identifier,TokenType::TOKEN_FUNCTION));
