@@ -1,5 +1,21 @@
-run: main.out
-	./main.out input.cos
+EXEC = a.out
+CC = g++
+OBJ = lexer.o main.o parser.o
 
-main.out: main.cpp
-	g++ -o main.out main.cpp
+run : $(EXEC)
+	./$(EXEC) sample_code.ol
+
+$(EXEC) : $(OBJ)
+	$(CC) $(OBJ) -o $(EXEC) -lm
+
+lexer.o : lexer.cpp lexer.h
+	$(CC) -c lexer.cpp
+
+main.o : main.cpp lexer.h
+	$(CC) -c main.cpp
+
+parser.o:parser.cpp parser.h
+	$(CC) -c parser.cpp
+
+clean:
+	rm -f $(EXEC) lexer.o main.o parser.o
