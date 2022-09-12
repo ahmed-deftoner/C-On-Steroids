@@ -92,34 +92,35 @@ void lexer::Tokenize()//function that tokenizes your input stream
                 identifier.push_back(*it);
                // cout<<"ii\n";
             }
-           // identifier.pop_back();
+            identifier.pop_back();
             cout<<identifier<<endl;
 
-            if (identifier.compare("function"))
+            if (identifier.compare("function")==0)
                 tokens.push_back(token(identifier,TokenType::TOKEN_FUNCTION));
-            else if (identifier.compare("int"))
+            else if (identifier.compare("int")==0)
                 tokens.push_back(token(identifier,TokenType::TOKEN_INT));
-            else if (identifier.compare("if"))
+            else if (identifier.compare("if")==0)
                 tokens.push_back(token(identifier,TokenType::TOKEN_IF));
-            else if (identifier.compare("else"))
+            else if (identifier.compare("else")==0)
                 tokens.push_back(token(identifier,TokenType::TOKEN_ELSE));
-            else if (identifier.compare("do"))
+            else if (identifier.compare("do")==0)
                 tokens.push_back(token(identifier,TokenType::TOKEN_DO));
-            else if (identifier.compare("until"))
+            else if (identifier.compare("until")==0)
                 tokens.push_back(token(identifier,TokenType::TOKEN_UNTIL));
-            else if (identifier.compare("then"))
+            else if (identifier.compare("then")==0)
                 tokens.push_back(token(identifier,TokenType::TOKEN_THEN));
-            else if (identifier.compare("read"))
+            else if (identifier.compare("read")==0)
                 tokens.push_back(token(identifier,TokenType::TOKEN_READ));
-            else if (identifier.compare("display"))
+            else if (identifier.compare("display")==0)
                 tokens.push_back(token(identifier,TokenType::TOKEN_DISPLAY));
-            else if (identifier.compare("displayline"))
+            else if (identifier.compare("displayline")==0)
                 tokens.push_back(token(identifier,TokenType::TOKEN_DISPLAYLINE));
-            else if (identifier.compare("return"))
+            else if (identifier.compare("return")==0)
                 tokens.push_back(token(identifier,TokenType::TOKEN_RETURN));
             else if (identifier[0] == '$')
                 tokens.push_back(token(identifier,TokenType::TOKEN_VARIABLE));
-            tokens.push_back(token(identifier,TokenType::TOKEN_IDENTIFIER));
+            else 
+                tokens.push_back(token(identifier,TokenType::TOKEN_IDENTIFIER));
         }
         ++it;
     }
