@@ -102,6 +102,20 @@ void lexer::Tokenize()//function that tokenizes your input stream
                 it+=2;
             }
         }
+        if (*it=='$') {
+            it++;
+            string vars;
+            if (isalpha(*it) || *it=='_') {
+                while (isalpha(*it) || *it=='_' || isdigit(*it))
+                {
+                    vars.push_back(*it);
+                    it++;
+                }
+                tokens.push_back(token(vars, TokenType::TOKEN_VARIABLE));
+            }else{
+                tokens.push_back(token("Variable format incorrect", TokenType::ERROR));
+            }
+        }
         //double quote string
         if (*it=='"') {
             it++;
@@ -125,17 +139,14 @@ void lexer::Tokenize()//function that tokenizes your input stream
             it++;
         }
         // Identifier or variable or keyword
-        if (isalpha(*it) || *it == '_' || *it == '$'){
-            //cout<<"i\n";
+        if (isalpha(*it) || *it == '_'){
             string identifier;
             identifier.push_back(*it);
             while (isdigit(*it) || isalpha(*it) || *it == '_'){
                 ++it;
                 identifier.push_back(*it);
-               // cout<<"ii\n";
             }
             identifier.pop_back();
-            //cout<<identifier;
 
             if (identifier.compare("function")==0)
                 tokens.push_back(token(identifier,TokenType::TOKEN_FUNCTION));
@@ -159,8 +170,6 @@ void lexer::Tokenize()//function that tokenizes your input stream
                 tokens.push_back(token(identifier,TokenType::TOKEN_DISPLAYLINE));
             else if (identifier.compare("return")==0)
                 tokens.push_back(token(identifier,TokenType::TOKEN_RETURN));
-            else if (identifier[0] == '$')
-                tokens.push_back(token(identifier,TokenType::TOKEN_VARIABLE));
             else 
                 tokens.push_back(token(identifier,TokenType::TOKEN_IDENTIFIER));
         }
