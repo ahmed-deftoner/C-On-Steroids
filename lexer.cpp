@@ -34,6 +34,7 @@ string reserved[] = {
  	"TOKEN_DIVIDE", 
  	"TOKEN_MULTIPLY",
  	"TOKEN_MODULUS",
+    "ERROR"
 	};
 token::token()
 {
@@ -80,11 +81,26 @@ void lexer::Tokenize()//function that tokenizes your input stream
             if (*it++ == '\n')
                 ++line;
         }
+        if (*it == '#') {
+            ++it;
+            if(*it == '~') {
+                ++it;
+                while (*it != '~' &(*it+1) != '#'){
+                    //cout<<*it;
+                    ++it;
+                    if (*it == '\0')
+			            tokens.push_back(token("comment not ended",TokenType::ERROR));
+
+                    if (*it == '\n')
+                        ++line;
+                }
+                it+=2;
+            }
+        }
         //cout<<"o\n";
         // Identifier or variable or keyword
-        if (isalpha(*it) || *it == '_' || *it == '$'){
+        if (isAlphabet(*it) || *it == '_' || *it == '$'){
             //cout<<"i\n";
-            size_t i, len;
             string identifier;
             identifier.push_back(*it);
             while (isdigit(*it) || isalpha(*it) || *it == '_'){
@@ -93,7 +109,7 @@ void lexer::Tokenize()//function that tokenizes your input stream
                // cout<<"ii\n";
             }
             identifier.pop_back();
-            cout<<identifier<<endl;
+            cout<<identifier;
 
             if (identifier.compare("function")==0)
                 tokens.push_back(token(identifier,TokenType::TOKEN_FUNCTION));
@@ -122,6 +138,7 @@ void lexer::Tokenize()//function that tokenizes your input stream
             else 
                 tokens.push_back(token(identifier,TokenType::TOKEN_IDENTIFIER));
         }
+        
         ++it;
     }
     cout<<line<<endl;
