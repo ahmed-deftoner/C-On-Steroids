@@ -38,6 +38,7 @@ string reserved[] = {
     "TOKEN_BLOCKCLOSE",
     "TOKEN_EQUALSIGN",
 	"TOKEN_STRING",
+    "TOKEN_FUNCARROW",
     "ERROR"
 	};
 token::token()
@@ -98,12 +99,20 @@ void lexer::Tokenize()//function that tokenizes your input stream
 
                     if (*it == '\n')
                         ++line;
-                }
+                };
                 it+=2;
             }
         }
+        //function returner
+        if (*it=='<') {
+            it++;
+            if (*it=='-'){
+                tokens.push_back(token("<-",TokenType::TOKEN_FUNCARROW));
+            }
+            it++;
+        }
         //Boolean Operations
-        if (*it=='-') {
+      /*  if (*it=='-') {
             //cout<<*it;
             if (*it+1=='e' && *it+2=='q'){
                 tokens.push_back(token("eq",TokenType::TOKEN_EQUAL));
@@ -125,7 +134,7 @@ void lexer::Tokenize()//function that tokenizes your input stream
                 tokens.push_back(token("ge",TokenType::TOKEN_GREATEREQUAL));
             //*it+=1;
             //cout<<*it;
-        }
+        }*/
         //variables
         if (*it=='$') {
             it++;
@@ -237,7 +246,6 @@ void lexer::Tokenize()//function that tokenizes your input stream
              tokens.push_back(token("=",TokenType::TOKEN_EQUALSIGN));
         ++it;
     }
-    cout<<line<<endl;
     
 	//push_back EOF token at end to identify End of File
     tokens.push_back(token(string(""), TokenType::END_OF_FILE));
