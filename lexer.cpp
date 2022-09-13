@@ -34,6 +34,8 @@ string reserved[] = {
  	"TOKEN_DIVIDE", 
  	"TOKEN_MULTIPLY",
  	"TOKEN_MODULUS",
+    "TOKEN_BLOCKOPEN",
+    "TOKEN_BLOCKCLOSE",
     "ERROR"
 	};
 token::token()
@@ -138,8 +140,8 @@ void lexer::Tokenize()//function that tokenizes your input stream
             else 
                 tokens.push_back(token(identifier,TokenType::TOKEN_IDENTIFIER));
         }
-        if (isdigit(*it))
-        {
+        //numbers
+        if (isdigit(*it)) {
             string num;
             while(isdigit(*it)){
                 num.push_back(*it);
@@ -149,7 +151,35 @@ void lexer::Tokenize()//function that tokenizes your input stream
             tokens.push_back(token(num,TokenType::TOKEN_NUMBER));
         }
         
-        
+        switch (*it)
+        {
+        case ',':
+            tokens.push_back(token(",",TokenType::TOKEN_COMMA));
+        case ';':
+             tokens.push_back(token(";",TokenType::TOKEN_SEMICOLON));
+        case ':':
+             tokens.push_back(token(":",TokenType::TOKEN_COLON));
+        case '+':
+             tokens.push_back(token("+",TokenType::TOKEN_PLUS));
+        case '-':
+             tokens.push_back(token("-",TokenType::TOKEN_MINUS));
+        case '*':
+             tokens.push_back(token("*",TokenType::TOKEN_MULTIPLY));
+        case '/':
+             tokens.push_back(token("/",TokenType::TOKEN_DIVIDE));
+        case '%':
+             tokens.push_back(token("%",TokenType::TOKEN_MODULUS));
+        case '(':
+             tokens.push_back(token("(",TokenType::TOKEN_OPENPARANTHESIS));
+        case ')':
+             tokens.push_back(token(")",TokenType::TOKEN_CLOSEPARANTHESIS));
+        case '{':
+             tokens.push_back(token("{",TokenType::TOKEN_BLOCKOPEN));
+        case '}':
+             tokens.push_back(token("}",TokenType::TOKEN_BLOCKCLOSE));;
+        default:
+            break;
+        }
         ++it;
     }
     cout<<line<<endl;

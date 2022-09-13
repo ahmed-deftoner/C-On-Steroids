@@ -42,7 +42,9 @@ enum class TokenType
  	TOKEN_DIVIDE = 29, 
  	TOKEN_MULTIPLY = 30,
  	TOKEN_MODULUS = 31,
-	ERROR = 32
+	TOKEN_BLOCKOPEN = 32,
+	TOKEN_BLOCKCLOSE = 33,
+	ERROR = 34
 
 };
 //structure of a token 
