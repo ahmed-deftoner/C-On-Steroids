@@ -45,7 +45,8 @@ enum class TokenType
 	TOKEN_BLOCKOPEN = 32,
 	TOKEN_BLOCKCLOSE = 33,
 	TOKEN_EQUALSIGN = 34,
-	ERROR = 35
+	TOKEN_STRING = 35,
+	ERROR = 36
 
 };
 //structure of a token 

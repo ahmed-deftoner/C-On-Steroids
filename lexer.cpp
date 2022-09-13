@@ -37,6 +37,7 @@ string reserved[] = {
     "TOKEN_BLOCKOPEN",
     "TOKEN_BLOCKCLOSE",
     "TOKEN_EQUALSIGN",
+	"TOKEN_STRING",
     "ERROR"
 	};
 token::token()
@@ -84,6 +85,7 @@ void lexer::Tokenize()//function that tokenizes your input stream
             if (*it++ == '\n')
                 ++line;
         }
+        //comments
         if (*it == '#') {
             ++it;
             if(*it == '~') {
@@ -100,7 +102,28 @@ void lexer::Tokenize()//function that tokenizes your input stream
                 it+=2;
             }
         }
-        //cout<<"o\n";
+        //double quote string
+        if (*it=='"') {
+            it++;
+            string literal;
+            while(*it != '"'){
+                literal.push_back(*it);
+                it++;
+            }
+            tokens.push_back(token(literal,TokenType::TOKEN_STRING));
+            it++;
+        }
+        //single quote string
+        if (*it=='\'') {
+            it++;
+            string literal;
+            while(*it != '\''){
+                literal.push_back(*it);
+                it++;
+            }
+            tokens.push_back(token(literal,TokenType::TOKEN_STRING));
+            it++;
+        }
         // Identifier or variable or keyword
         if (isalpha(*it) || *it == '_' || *it == '$'){
             //cout<<"i\n";
