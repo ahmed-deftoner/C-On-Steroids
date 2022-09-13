@@ -36,6 +36,7 @@ string reserved[] = {
  	"TOKEN_MODULUS",
     "TOKEN_BLOCKOPEN",
     "TOKEN_BLOCKCLOSE",
+    "TOKEN_EQUALSIGN",
     "ERROR"
 	};
 token::token()
@@ -175,6 +176,8 @@ void lexer::Tokenize()//function that tokenizes your input stream
              tokens.push_back(token("{",TokenType::TOKEN_BLOCKOPEN));
         else if (*it=='}')
              tokens.push_back(token("}",TokenType::TOKEN_BLOCKCLOSE));
+        else if (*it=='=')
+             tokens.push_back(token("=",TokenType::TOKEN_EQUALSIGN));
         ++it;
     }
     cout<<line<<endl;
