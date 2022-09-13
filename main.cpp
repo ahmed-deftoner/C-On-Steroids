@@ -13,7 +13,7 @@ int main(int argc, char* argv[])
 		t = _lexer.getNextToken();
 		while (t.tokenType != TokenType::END_OF_FILE)
 		{
-			t.Print();
+			//t.Print();
 			t = _lexer.getNextToken();
 		}
 	}

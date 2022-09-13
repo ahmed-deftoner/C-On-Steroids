@@ -99,7 +99,7 @@ void lexer::Tokenize()//function that tokenizes your input stream
         }
         //cout<<"o\n";
         // Identifier or variable or keyword
-        if (isAlphabet(*it) || *it == '_' || *it == '$'){
+        if (isalpha(*it) || *it == '_' || *it == '$'){
             //cout<<"i\n";
             string identifier;
             identifier.push_back(*it);
@@ -109,7 +109,7 @@ void lexer::Tokenize()//function that tokenizes your input stream
                // cout<<"ii\n";
             }
             identifier.pop_back();
-            cout<<identifier;
+            //cout<<identifier;
 
             if (identifier.compare("function")==0)
                 tokens.push_back(token(identifier,TokenType::TOKEN_FUNCTION));
@@ -138,6 +138,17 @@ void lexer::Tokenize()//function that tokenizes your input stream
             else 
                 tokens.push_back(token(identifier,TokenType::TOKEN_IDENTIFIER));
         }
+        if (isdigit(*it))
+        {
+            string num;
+            while(isdigit(*it)){
+                num.push_back(*it);
+                it++;
+            }
+            cout<<num;
+            tokens.push_back(token(num,TokenType::TOKEN_NUMBER));
+        }
+        
         
         ++it;
     }
