@@ -34,6 +34,12 @@ string reserved[] = {
  	"TOKEN_DIVIDE", 
  	"TOKEN_MULTIPLY",
  	"TOKEN_MODULUS",
+    "TOKEN_BLOCKOPEN",
+    "TOKEN_BLOCKCLOSE",
+    "TOKEN_EQUALSIGN",
+	"TOKEN_STRING",
+    "TOKEN_FUNCARROW",
+    "ERROR"
 	};
 token::token()
 {
@@ -80,20 +86,123 @@ void lexer::Tokenize()//function that tokenizes your input stream
             if (*it++ == '\n')
                 ++line;
         }
-        //cout<<"o\n";
-        // Identifier or variable or keyword
-        if (isalpha(*it) || *it == '_' || *it == '$'){
-            //cout<<"i\n";
-            size_t i, len;
+        //comments
+        if (*it == '#') {
+            ++it;
+            if(*it == '~') {
+                ++it;
+                while (*it != '~' && (*it+1) != '#'){
+                    //cout<<*it;
+                    ++it;
+                    if (*it == '\0')
+			            tokens.push_back(token("comment not ended",TokenType::ERROR));
+
+                    if (*it == '\n')
+                        ++line;
+                };
+                it+=2;
+            }
+        }
+        //function returner
+        if (*it=='<') {
+            it++;
+            if (*it=='-'){
+                tokens.push_back(token("<-",TokenType::TOKEN_FUNCARROW));
+            }
+            it++;
+        }
+        //Boolean Operations
+        if (*it=='-') {
+            it++;
+            if (*it=='e'){
+                it++;
+                if (*it=='q') {
+                    tokens.push_back(token("eq",TokenType::TOKEN_EQUAL));
+                    *it++;
+                }
+            }
+            else if (*it=='n'){
+                it++;
+                if (*it=='e') {
+                    tokens.push_back(token("ne",TokenType::TOKEN_NOTEQUAL));
+                    *it++;
+                }
+            }
+            else if (*it=='l'){
+                it++;
+                if (*it=='t') {
+                    tokens.push_back(token("lt",TokenType::TOKEN_LESS));
+                    *it++;
+                }
+            }
+            else if (*it=='l'){
+                it++;
+                if (*it=='e') {
+                    tokens.push_back(token("le",TokenType::TOKEN_LESSEQUAL));
+                    *it++;
+                }
+            }
+            else if (*it=='g'){
+                it++;
+                if (*it=='t') {
+                    tokens.push_back(token("gt",TokenType::TOKEN_GREATER));
+                    *it++;
+                }
+            }
+           else if (*it=='g'){
+                it++;
+                if (*it=='e') {
+                    tokens.push_back(token("ge",TokenType::TOKEN_GREATEREQUAL));
+                    *it++;
+                }
+            }
+        }
+        //variables
+        if (*it=='$') {
+            it++;
+            string vars;
+            if (isalpha(*it) || *it=='_') {
+                while (isalpha(*it) || *it=='_' || isdigit(*it))
+                {
+                    vars.push_back(*it);
+                    it++;
+                }
+                tokens.push_back(token(vars, TokenType::TOKEN_VARIABLE));
+            }else{
+                tokens.push_back(token("Variable format incorrect", TokenType::ERROR));
+            }
+        }
+        //double quote string
+        if (*it=='"') {
+            it++;
+            string literal;
+            while(*it != '"'){
+                literal.push_back(*it);
+                it++;
+            }
+            tokens.push_back(token(literal,TokenType::TOKEN_STRING));
+            it++;
+        }
+        //single quote string
+        if (*it=='\'') {
+            it++;
+            string literal;
+            while(*it != '\''){
+                literal.push_back(*it);
+                it++;
+            }
+            tokens.push_back(token(literal,TokenType::TOKEN_STRING));
+            it++;
+        }
+        // Identifier or keyword
+        if (isalpha(*it) || *it == '_'){
             string identifier;
             identifier.push_back(*it);
             while (isdigit(*it) || isalpha(*it) || *it == '_'){
                 ++it;
                 identifier.push_back(*it);
-               // cout<<"ii\n";
             }
             identifier.pop_back();
-            cout<<identifier<<endl;
 
             if (identifier.compare("function")==0)
                 tokens.push_back(token(identifier,TokenType::TOKEN_FUNCTION));
@@ -117,14 +226,48 @@ void lexer::Tokenize()//function that tokenizes your input stream
                 tokens.push_back(token(identifier,TokenType::TOKEN_DISPLAYLINE));
             else if (identifier.compare("return")==0)
                 tokens.push_back(token(identifier,TokenType::TOKEN_RETURN));
-            else if (identifier[0] == '$')
-                tokens.push_back(token(identifier,TokenType::TOKEN_VARIABLE));
             else 
                 tokens.push_back(token(identifier,TokenType::TOKEN_IDENTIFIER));
         }
+        //numbers
+        if (isdigit(*it)) {
+            string num;
+            while(isdigit(*it)){
+                num.push_back(*it);
+                it++;
+            }
+          //  cout<<num;
+            tokens.push_back(token(num,TokenType::TOKEN_NUMBER));
+        }
+        
+        if(*it==',')
+            tokens.push_back(token(",",TokenType::TOKEN_COMMA));
+        else if (*it==';')
+            tokens.push_back(token(";",TokenType::TOKEN_SEMICOLON));
+        else if (*it==':')
+            tokens.push_back(token(":",TokenType::TOKEN_COLON));
+        else if (*it=='+')
+             tokens.push_back(token("+",TokenType::TOKEN_PLUS));
+        else if (*it=='-')
+             tokens.push_back(token("-",TokenType::TOKEN_MINUS));
+        else if (*it=='*')
+             tokens.push_back(token("*",TokenType::TOKEN_MULTIPLY));
+        else if (*it=='/')
+             tokens.push_back(token("/",TokenType::TOKEN_DIVIDE));
+        else if (*it=='%')
+             tokens.push_back(token("%",TokenType::TOKEN_MODULUS));
+        else if (*it=='(')
+             tokens.push_back(token("(",TokenType::TOKEN_OPENPARANTHESIS));
+        else if (*it==')')
+             tokens.push_back(token(")",TokenType::TOKEN_CLOSEPARANTHESIS));
+        else if (*it=='{')
+             tokens.push_back(token("{",TokenType::TOKEN_BLOCKOPEN));
+        else if (*it=='}')
+             tokens.push_back(token("}",TokenType::TOKEN_BLOCKCLOSE));
+        else if (*it=='=')
+             tokens.push_back(token("=",TokenType::TOKEN_EQUALSIGN));
         ++it;
     }
-    cout<<line<<endl;
     
 	//push_back EOF token at end to identify End of File
     tokens.push_back(token(string(""), TokenType::END_OF_FILE));
