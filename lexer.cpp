@@ -151,35 +151,30 @@ void lexer::Tokenize()//function that tokenizes your input stream
             tokens.push_back(token(num,TokenType::TOKEN_NUMBER));
         }
         
-        switch (*it)
-        {
-        case ',':
+        if(*it==',')
             tokens.push_back(token(",",TokenType::TOKEN_COMMA));
-        case ';':
-             tokens.push_back(token(";",TokenType::TOKEN_SEMICOLON));
-        case ':':
-             tokens.push_back(token(":",TokenType::TOKEN_COLON));
-        case '+':
+        else if (*it==';')
+            tokens.push_back(token(";",TokenType::TOKEN_SEMICOLON));
+        else if (*it==':')
+            tokens.push_back(token(":",TokenType::TOKEN_COLON));
+        else if (*it=='+')
              tokens.push_back(token("+",TokenType::TOKEN_PLUS));
-        case '-':
+        else if (*it=='-')
              tokens.push_back(token("-",TokenType::TOKEN_MINUS));
-        case '*':
+        else if (*it=='*')
              tokens.push_back(token("*",TokenType::TOKEN_MULTIPLY));
-        case '/':
+        else if (*it=='/')
              tokens.push_back(token("/",TokenType::TOKEN_DIVIDE));
-        case '%':
+        else if (*it=='%')
              tokens.push_back(token("%",TokenType::TOKEN_MODULUS));
-        case '(':
+        else if (*it=='(')
              tokens.push_back(token("(",TokenType::TOKEN_OPENPARANTHESIS));
-        case ')':
+        else if (*it==')')
              tokens.push_back(token(")",TokenType::TOKEN_CLOSEPARANTHESIS));
-        case '{':
+        else if (*it=='{')
              tokens.push_back(token("{",TokenType::TOKEN_BLOCKOPEN));
-        case '}':
-             tokens.push_back(token("}",TokenType::TOKEN_BLOCKCLOSE));;
-        default:
-            break;
-        }
+        else if (*it=='}')
+             tokens.push_back(token("}",TokenType::TOKEN_BLOCKCLOSE));
         ++it;
     }
     cout<<line<<endl;
