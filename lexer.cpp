@@ -112,29 +112,51 @@ void lexer::Tokenize()//function that tokenizes your input stream
             it++;
         }
         //Boolean Operations
-      /*  if (*it=='-') {
-            //cout<<*it;
-            if (*it+1=='e' && *it+2=='q'){
-                tokens.push_back(token("eq",TokenType::TOKEN_EQUAL));
-                *it+=3;
-                cout<<*it--;
+        if (*it=='-') {
+            it++;
+            if (*it=='e'){
+                it++;
+                if (*it=='q') {
+                    tokens.push_back(token("eq",TokenType::TOKEN_EQUAL));
+                    *it++;
+                }
             }
-            else if (*it+1=='n' && *it+2=='e')
-                tokens.push_back(token("ne",TokenType::TOKEN_NOTEQUAL));
-            else if (*it+1=='l' && *it+2=='t'){
-                tokens.push_back(token("lt",TokenType::TOKEN_LESS));
-                *it+=3;
-                cout<<*it--;
+            else if (*it=='n'){
+                it++;
+                if (*it=='e') {
+                    tokens.push_back(token("ne",TokenType::TOKEN_NOTEQUAL));
+                    *it++;
+                }
             }
-            else if (*it+1=='l' && *it+2=='e')
-                tokens.push_back(token("le",TokenType::TOKEN_LESSEQUAL));
-            else if (*it+1=='g' && *it+2=='t')
-                tokens.push_back(token("gt",TokenType::TOKEN_GREATER));
-            else if (*it+1=='g' && *it+2=='e')
-                tokens.push_back(token("ge",TokenType::TOKEN_GREATEREQUAL));
-            //*it+=1;
-            //cout<<*it;
-        }*/
+            else if (*it=='l'){
+                it++;
+                if (*it=='t') {
+                    tokens.push_back(token("lt",TokenType::TOKEN_LESS));
+                    *it++;
+                }
+            }
+            else if (*it=='l'){
+                it++;
+                if (*it=='e') {
+                    tokens.push_back(token("le",TokenType::TOKEN_LESSEQUAL));
+                    *it++;
+                }
+            }
+            else if (*it=='g'){
+                it++;
+                if (*it=='t') {
+                    tokens.push_back(token("gt",TokenType::TOKEN_GREATER));
+                    *it++;
+                }
+            }
+           else if (*it=='g'){
+                it++;
+                if (*it=='e') {
+                    tokens.push_back(token("ge",TokenType::TOKEN_GREATEREQUAL));
+                    *it++;
+                }
+            }
+        }
         //variables
         if (*it=='$') {
             it++;
