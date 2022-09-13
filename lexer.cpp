@@ -90,7 +90,7 @@ void lexer::Tokenize()//function that tokenizes your input stream
             ++it;
             if(*it == '~') {
                 ++it;
-                while (*it != '~' &(*it+1) != '#'){
+                while (*it != '~' && (*it+1) != '#'){
                     //cout<<*it;
                     ++it;
                     if (*it == '\0')
@@ -102,6 +102,31 @@ void lexer::Tokenize()//function that tokenizes your input stream
                 it+=2;
             }
         }
+        //Boolean Operations
+        if (*it=='-') {
+            //cout<<*it;
+            if (*it+1=='e' && *it+2=='q'){
+                tokens.push_back(token("eq",TokenType::TOKEN_EQUAL));
+                *it+=3;
+                cout<<*it--;
+            }
+            else if (*it+1=='n' && *it+2=='e')
+                tokens.push_back(token("ne",TokenType::TOKEN_NOTEQUAL));
+            else if (*it+1=='l' && *it+2=='t'){
+                tokens.push_back(token("lt",TokenType::TOKEN_LESS));
+                *it+=3;
+                cout<<*it--;
+            }
+            else if (*it+1=='l' && *it+2=='e')
+                tokens.push_back(token("le",TokenType::TOKEN_LESSEQUAL));
+            else if (*it+1=='g' && *it+2=='t')
+                tokens.push_back(token("gt",TokenType::TOKEN_GREATER));
+            else if (*it+1=='g' && *it+2=='e')
+                tokens.push_back(token("ge",TokenType::TOKEN_GREATEREQUAL));
+            //*it+=1;
+            //cout<<*it;
+        }
+        //variables
         if (*it=='$') {
             it++;
             string vars;
@@ -138,7 +163,7 @@ void lexer::Tokenize()//function that tokenizes your input stream
             tokens.push_back(token(literal,TokenType::TOKEN_STRING));
             it++;
         }
-        // Identifier or variable or keyword
+        // Identifier or keyword
         if (isalpha(*it) || *it == '_'){
             string identifier;
             identifier.push_back(*it);
@@ -180,7 +205,7 @@ void lexer::Tokenize()//function that tokenizes your input stream
                 num.push_back(*it);
                 it++;
             }
-            cout<<num;
+          //  cout<<num;
             tokens.push_back(token(num,TokenType::TOKEN_NUMBER));
         }
         
