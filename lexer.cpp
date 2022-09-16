@@ -81,6 +81,24 @@ void skipSpaces(vector<char>::iterator &it,int &line) {
         }
 }
 
+void checkComments(vector<char>::iterator &it,int &line,vector<token> &tokens) {
+    if (*it == '#') {
+        ++it;
+        if(*it == '~') {
+            ++it;
+            while (*it != '~' && (*it+1) != '#'){
+                ++it;
+                if (*it == '\0')
+                    tokens.push_back(token("comment not ended",TokenType::ERROR));
+
+                if (*it == '\n')
+                    ++line;
+            };
+            it+=2;
+        }
+    }
+}
+
 void lexer::Tokenize()//function that tokenizes your input stream
 {
     vector<char>::iterator it = stream.begin();
@@ -88,28 +106,10 @@ void lexer::Tokenize()//function that tokenizes your input stream
     int line = 1;
     while(it != stream.end())
     {
-        /* Skip whitespace.  
-        if (*it == ' ' || *it == '\t' || *it == '\n') {
-            if (*it++ == '\n')
-                ++line;
-        }*/
+        /* Skip whitespace.  */
+        skipSpaces(it, line);
         //comments
-        if (*it == '#') {
-            ++it;
-            if(*it == '~') {
-                ++it;
-                while (*it != '~' && (*it+1) != '#'){
-                    //cout<<*it;
-                    ++it;
-                    if (*it == '\0')
-			            tokens.push_back(token("comment not ended",TokenType::ERROR));
-
-                    if (*it == '\n')
-                        ++line;
-                };
-                it+=2;
-            }
-        }
+        checkComments(it, line, tokens);
         //function returner
         if (*it=='<') {
             it++;
