@@ -271,7 +271,8 @@ void checkSpecialCharacters(vector<char>::iterator &it, vector<token> &tokens) {
 }
 
 void outputTokens(vector<token> &tokens) {
-    fstream fout("tokens.txt", ios::out);
+    fstream fout;
+    fout.open("tokens.txt", ios::out);
     for (token x : tokens) {
         fout << x.lexeme << " " << reserved[(int)x.tokenType] << endl;
     }
@@ -287,22 +288,23 @@ void lexer::Tokenize()//function that tokenizes your input stream
     {
         // Skip whitespace
         skipSpaces(it, line);
-        // comments
+        // Comments
         checkComments(it, line, tokens);
-        // function returner
+        // Function Symbol
         functionSymbol(it, tokens);
         // Boolean Operations
         booleanOps(it, tokens);
-        //variables
+        // Variables
         checkVariable(it, tokens);
-        // strings
+        // Strings
         checkString(it, tokens);
         // Identifier or keyword
         checkIdentifierOrKeyword(it, tokens);
-        //numbers
+        // Numbers
         checkNumbers(it, tokens);
         // Special Characters
         checkSpecialCharacters(it, tokens);
+        // Output file
         outputTokens(tokens);
         ++it;
     }
@@ -310,6 +312,7 @@ void lexer::Tokenize()//function that tokenizes your input stream
 	//push_back EOF token at end to identify End of File
     tokens.push_back(token(string(""), TokenType::END_OF_FILE));
 }
+
 lexer::lexer(const char filename[])
 {
     //constructors: takes file name as an argument and store all
