@@ -68,12 +68,6 @@ void lexer::setCurrentPointer(int pos)
         index = 0;
 }
 
-bool isAlphabet(char &x){
-    if ((x >= 'a' && x <= 'z') || (x >= 'A' && x <= 'Z'))
-        return true;
-    return false;
-}
-
 void skipSpaces(vector<char>::iterator &it,int &line) {
      if (*it == ' ' || *it == '\t' || *it == '\n') {
             if (*it++ == '\n')
@@ -109,21 +103,8 @@ void functionSymbol(vector<char>::iterator &it, vector<token> &tokens) {
      }
 }
 
-void lexer::Tokenize()//function that tokenizes your input stream
-{
-    vector<char>::iterator it = stream.begin();
-	//your implementation goes here
-    int line = 1;
-    while(it != stream.end())
-    {
-        /* Skip whitespace.  */
-        skipSpaces(it, line);
-        //comments
-        checkComments(it, line, tokens);
-        //function returner
-        functionSymbol(it, tokens);
-        //Boolean Operations
-        if (*it=='-') {
+void booleanOps(vector<char>::iterator &it, vector<token> &tokens){
+     if (*it=='-') {
             it++;
             if (*it=='e'){
                 it++;
@@ -167,7 +148,24 @@ void lexer::Tokenize()//function that tokenizes your input stream
                     *it++;
                 }
             }
-        }
+    }
+}
+
+void lexer::Tokenize()//function that tokenizes your input stream
+{
+    vector<char>::iterator it = stream.begin();
+	//your implementation goes here
+    int line = 1;
+    while(it != stream.end())
+    {
+        // Skip whitespace
+        skipSpaces(it, line);
+        // comments
+        checkComments(it, line, tokens);
+        // function returner
+        functionSymbol(it, tokens);
+        // Boolean Operations
+        booleanOps(it, tokens);
         //variables
         if (*it=='$') {
             it++;
