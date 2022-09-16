@@ -270,6 +270,14 @@ void checkSpecialCharacters(vector<char>::iterator &it, vector<token> &tokens) {
             tokens.push_back(token("=",TokenType::TOKEN_EQUALSIGN));
 }
 
+void outputTokens(vector<token> &tokens) {
+    fstream fout("tokens.txt", ios::out);
+    for (token x : tokens) {
+        fout << x.lexeme << " " << reserved[(int)x.tokenType] << endl;
+    }
+    fout.close();
+}
+
 void lexer::Tokenize()//function that tokenizes your input stream
 {
     vector<char>::iterator it = stream.begin();
@@ -295,7 +303,7 @@ void lexer::Tokenize()//function that tokenizes your input stream
         checkNumbers(it, tokens);
         // Special Characters
         checkSpecialCharacters(it, tokens);
-       
+        outputTokens(tokens);
         ++it;
     }
     
