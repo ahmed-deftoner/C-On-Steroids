@@ -193,6 +193,43 @@ void checkString(vector<char>::iterator &it, vector<token> &tokens) {
     }
 }
 
+void checkIdentifierOrKeyword(vector<char>::iterator &it, vector<token> &tokens) {
+     if (isalpha(*it) || *it == '_'){
+        string identifier;
+        identifier.push_back(*it);
+        while (isdigit(*it) || isalpha(*it) || *it == '_'){
+            ++it;
+            identifier.push_back(*it);
+        }
+        identifier.pop_back();
+
+        if (identifier.compare("function")==0)
+            tokens.push_back(token(identifier,TokenType::TOKEN_FUNCTION));
+        else if (identifier.compare("int")==0)
+            tokens.push_back(token(identifier,TokenType::TOKEN_INT));
+        else if (identifier.compare("if")==0)
+            tokens.push_back(token(identifier,TokenType::TOKEN_IF));
+        else if (identifier.compare("else")==0)
+            tokens.push_back(token(identifier,TokenType::TOKEN_ELSE));
+        else if (identifier.compare("do")==0)
+            tokens.push_back(token(identifier,TokenType::TOKEN_DO));
+        else if (identifier.compare("until")==0)
+            tokens.push_back(token(identifier,TokenType::TOKEN_UNTIL));
+        else if (identifier.compare("then")==0)
+            tokens.push_back(token(identifier,TokenType::TOKEN_THEN));
+        else if (identifier.compare("read")==0)
+            tokens.push_back(token(identifier,TokenType::TOKEN_READ));
+        else if (identifier.compare("display")==0)
+            tokens.push_back(token(identifier,TokenType::TOKEN_DISPLAY));
+        else if (identifier.compare("displayline")==0)
+            tokens.push_back(token(identifier,TokenType::TOKEN_DISPLAYLINE));
+        else if (identifier.compare("return")==0)
+            tokens.push_back(token(identifier,TokenType::TOKEN_RETURN));
+        else 
+            tokens.push_back(token(identifier,TokenType::TOKEN_IDENTIFIER));
+    }
+}
+
 void lexer::Tokenize()//function that tokenizes your input stream
 {
     vector<char>::iterator it = stream.begin();
@@ -213,40 +250,7 @@ void lexer::Tokenize()//function that tokenizes your input stream
         // strings
         checkString(it, tokens);
         // Identifier or keyword
-        if (isalpha(*it) || *it == '_'){
-            string identifier;
-            identifier.push_back(*it);
-            while (isdigit(*it) || isalpha(*it) || *it == '_'){
-                ++it;
-                identifier.push_back(*it);
-            }
-            identifier.pop_back();
-
-            if (identifier.compare("function")==0)
-                tokens.push_back(token(identifier,TokenType::TOKEN_FUNCTION));
-            else if (identifier.compare("int")==0)
-                tokens.push_back(token(identifier,TokenType::TOKEN_INT));
-            else if (identifier.compare("if")==0)
-                tokens.push_back(token(identifier,TokenType::TOKEN_IF));
-            else if (identifier.compare("else")==0)
-                tokens.push_back(token(identifier,TokenType::TOKEN_ELSE));
-            else if (identifier.compare("do")==0)
-                tokens.push_back(token(identifier,TokenType::TOKEN_DO));
-            else if (identifier.compare("until")==0)
-                tokens.push_back(token(identifier,TokenType::TOKEN_UNTIL));
-            else if (identifier.compare("then")==0)
-                tokens.push_back(token(identifier,TokenType::TOKEN_THEN));
-            else if (identifier.compare("read")==0)
-                tokens.push_back(token(identifier,TokenType::TOKEN_READ));
-            else if (identifier.compare("display")==0)
-                tokens.push_back(token(identifier,TokenType::TOKEN_DISPLAY));
-            else if (identifier.compare("displayline")==0)
-                tokens.push_back(token(identifier,TokenType::TOKEN_DISPLAYLINE));
-            else if (identifier.compare("return")==0)
-                tokens.push_back(token(identifier,TokenType::TOKEN_RETURN));
-            else 
-                tokens.push_back(token(identifier,TokenType::TOKEN_IDENTIFIER));
-        }
+        checkIdentifierOrKeyword(it, tokens);
         //numbers
         if (isdigit(*it)) {
             string num;
