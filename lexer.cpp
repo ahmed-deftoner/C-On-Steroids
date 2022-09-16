@@ -74,6 +74,13 @@ bool isAlphabet(char &x){
     return false;
 }
 
+void skipSpaces(vector<char>::iterator &it,int &line) {
+     if (*it == ' ' || *it == '\t' || *it == '\n') {
+            if (*it++ == '\n')
+                ++line;
+        }
+}
+
 void lexer::Tokenize()//function that tokenizes your input stream
 {
     vector<char>::iterator it = stream.begin();
@@ -81,11 +88,11 @@ void lexer::Tokenize()//function that tokenizes your input stream
     int line = 1;
     while(it != stream.end())
     {
-        /* Skip whitespace.  */
+        /* Skip whitespace.  
         if (*it == ' ' || *it == '\t' || *it == '\n') {
             if (*it++ == '\n')
                 ++line;
-        }
+        }*/
         //comments
         if (*it == '#') {
             ++it;
