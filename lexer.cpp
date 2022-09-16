@@ -151,6 +151,23 @@ void booleanOps(vector<char>::iterator &it, vector<token> &tokens){
     }
 }
 
+void checkVariable(vector<char>::iterator &it, vector<token> &tokens) {
+    if (*it=='$') {
+        it++;
+        string vars;
+        if (isalpha(*it) || *it=='_') {
+            while (isalpha(*it) || *it=='_' || isdigit(*it))
+            {
+                vars.push_back(*it);
+                it++;
+            }
+            tokens.push_back(token(vars, TokenType::TOKEN_VARIABLE));
+        }else{
+            tokens.push_back(token("Variable format incorrect", TokenType::ERROR));
+        }
+    }
+}
+
 void lexer::Tokenize()//function that tokenizes your input stream
 {
     vector<char>::iterator it = stream.begin();
@@ -167,20 +184,7 @@ void lexer::Tokenize()//function that tokenizes your input stream
         // Boolean Operations
         booleanOps(it, tokens);
         //variables
-        if (*it=='$') {
-            it++;
-            string vars;
-            if (isalpha(*it) || *it=='_') {
-                while (isalpha(*it) || *it=='_' || isdigit(*it))
-                {
-                    vars.push_back(*it);
-                    it++;
-                }
-                tokens.push_back(token(vars, TokenType::TOKEN_VARIABLE));
-            }else{
-                tokens.push_back(token("Variable format incorrect", TokenType::ERROR));
-            }
-        }
+        checkVariable(it, tokens);
         //double quote string
         if (*it=='"') {
             it++;
