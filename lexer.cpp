@@ -99,6 +99,16 @@ void checkComments(vector<char>::iterator &it,int &line,vector<token> &tokens) {
     }
 }
 
+void functionSymbol(vector<char>::iterator &it, vector<token> &tokens) {
+     if (*it=='<') {
+        it++;
+        if (*it=='-'){
+            tokens.push_back(token("<-",TokenType::TOKEN_FUNCARROW));
+        }
+        it++;
+     }
+}
+
 void lexer::Tokenize()//function that tokenizes your input stream
 {
     vector<char>::iterator it = stream.begin();
@@ -111,13 +121,7 @@ void lexer::Tokenize()//function that tokenizes your input stream
         //comments
         checkComments(it, line, tokens);
         //function returner
-        if (*it=='<') {
-            it++;
-            if (*it=='-'){
-                tokens.push_back(token("<-",TokenType::TOKEN_FUNCARROW));
-            }
-            it++;
-        }
+        functionSymbol(it, tokens);
         //Boolean Operations
         if (*it=='-') {
             it++;
