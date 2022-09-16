@@ -230,6 +230,46 @@ void checkIdentifierOrKeyword(vector<char>::iterator &it, vector<token> &tokens)
     }
 }
 
+void checkNumbers(vector<char>::iterator &it, vector<token> &tokens) {
+      if (isdigit(*it)) {
+        string num;
+        while (isdigit(*it)) {
+            num.push_back(*it);
+            it++;
+        }
+        tokens.push_back(token(num,TokenType::TOKEN_NUMBER));
+    }
+}
+
+void checkSpecialCharacters(vector<char>::iterator &it, vector<token> &tokens) {
+    if(*it==',')
+        tokens.push_back(token(",",TokenType::TOKEN_COMMA));
+    else if (*it==';')
+        tokens.push_back(token(";",TokenType::TOKEN_SEMICOLON));
+    else if (*it==':')
+        tokens.push_back(token(":",TokenType::TOKEN_COLON));
+    else if (*it=='+')
+            tokens.push_back(token("+",TokenType::TOKEN_PLUS));
+    else if (*it=='-')
+            tokens.push_back(token("-",TokenType::TOKEN_MINUS));
+    else if (*it=='*')
+            tokens.push_back(token("*",TokenType::TOKEN_MULTIPLY));
+    else if (*it=='/')
+            tokens.push_back(token("/",TokenType::TOKEN_DIVIDE));
+    else if (*it=='%')
+            tokens.push_back(token("%",TokenType::TOKEN_MODULUS));
+    else if (*it=='(')
+            tokens.push_back(token("(",TokenType::TOKEN_OPENPARANTHESIS));
+    else if (*it==')')
+            tokens.push_back(token(")",TokenType::TOKEN_CLOSEPARANTHESIS));
+    else if (*it=='{')
+            tokens.push_back(token("{",TokenType::TOKEN_BLOCKOPEN));
+    else if (*it=='}')
+            tokens.push_back(token("}",TokenType::TOKEN_BLOCKCLOSE));
+    else if (*it=='=')
+            tokens.push_back(token("=",TokenType::TOKEN_EQUALSIGN));
+}
+
 void lexer::Tokenize()//function that tokenizes your input stream
 {
     vector<char>::iterator it = stream.begin();
@@ -252,42 +292,10 @@ void lexer::Tokenize()//function that tokenizes your input stream
         // Identifier or keyword
         checkIdentifierOrKeyword(it, tokens);
         //numbers
-        if (isdigit(*it)) {
-            string num;
-            while(isdigit(*it)){
-                num.push_back(*it);
-                it++;
-            }
-          //  cout<<num;
-            tokens.push_back(token(num,TokenType::TOKEN_NUMBER));
-        }
-        
-        if(*it==',')
-            tokens.push_back(token(",",TokenType::TOKEN_COMMA));
-        else if (*it==';')
-            tokens.push_back(token(";",TokenType::TOKEN_SEMICOLON));
-        else if (*it==':')
-            tokens.push_back(token(":",TokenType::TOKEN_COLON));
-        else if (*it=='+')
-             tokens.push_back(token("+",TokenType::TOKEN_PLUS));
-        else if (*it=='-')
-             tokens.push_back(token("-",TokenType::TOKEN_MINUS));
-        else if (*it=='*')
-             tokens.push_back(token("*",TokenType::TOKEN_MULTIPLY));
-        else if (*it=='/')
-             tokens.push_back(token("/",TokenType::TOKEN_DIVIDE));
-        else if (*it=='%')
-             tokens.push_back(token("%",TokenType::TOKEN_MODULUS));
-        else if (*it=='(')
-             tokens.push_back(token("(",TokenType::TOKEN_OPENPARANTHESIS));
-        else if (*it==')')
-             tokens.push_back(token(")",TokenType::TOKEN_CLOSEPARANTHESIS));
-        else if (*it=='{')
-             tokens.push_back(token("{",TokenType::TOKEN_BLOCKOPEN));
-        else if (*it=='}')
-             tokens.push_back(token("}",TokenType::TOKEN_BLOCKCLOSE));
-        else if (*it=='=')
-             tokens.push_back(token("=",TokenType::TOKEN_EQUALSIGN));
+        checkNumbers(it, tokens);
+        // Special Characters
+        checkSpecialCharacters(it, tokens);
+       
         ++it;
     }
     
