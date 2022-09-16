@@ -168,6 +168,31 @@ void checkVariable(vector<char>::iterator &it, vector<token> &tokens) {
     }
 }
 
+void checkString(vector<char>::iterator &it, vector<token> &tokens) {
+    //double quote string
+    if (*it=='"') {
+        it++;
+        string literal;
+        while(*it != '"'){
+            literal.push_back(*it);
+            it++;
+        }
+        tokens.push_back(token(literal,TokenType::TOKEN_STRING));
+        it++;
+    }
+    //single quote string
+    if (*it=='\'') {
+        it++;
+        string literal;
+        while(*it != '\''){
+            literal.push_back(*it);
+            it++;
+        }
+        tokens.push_back(token(literal,TokenType::TOKEN_STRING));
+        it++;
+    }
+}
+
 void lexer::Tokenize()//function that tokenizes your input stream
 {
     vector<char>::iterator it = stream.begin();
@@ -185,28 +210,8 @@ void lexer::Tokenize()//function that tokenizes your input stream
         booleanOps(it, tokens);
         //variables
         checkVariable(it, tokens);
-        //double quote string
-        if (*it=='"') {
-            it++;
-            string literal;
-            while(*it != '"'){
-                literal.push_back(*it);
-                it++;
-            }
-            tokens.push_back(token(literal,TokenType::TOKEN_STRING));
-            it++;
-        }
-        //single quote string
-        if (*it=='\'') {
-            it++;
-            string literal;
-            while(*it != '\''){
-                literal.push_back(*it);
-                it++;
-            }
-            tokens.push_back(token(literal,TokenType::TOKEN_STRING));
-            it++;
-        }
+        // strings
+        checkString(it, tokens);
         // Identifier or keyword
         if (isalpha(*it) || *it == '_'){
             string identifier;
