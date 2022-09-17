@@ -1,9 +1,10 @@
 #include "lexer.h"
 using namespace std;
+
 //for printing tokens names, Same as the enum defined in lexer.h
 string reserved[] = {
-    "END_OF_FILE",
-    "TOKEN_IDENTIFIER",
+    	"END_OF_FILE",
+    	"TOKEN_IDENTIFIER",
  	"TOKEN_NUMBER",
  	"TOKEN_VARIABLE",
  	"TOKEN_FUNCTION",
@@ -34,34 +35,34 @@ string reserved[] = {
  	"TOKEN_DIVIDE", 
  	"TOKEN_MULTIPLY",
  	"TOKEN_MODULUS",
-    "TOKEN_BLOCKOPEN",
-    "TOKEN_BLOCKCLOSE",
-    "TOKEN_EQUALSIGN",
+    	"TOKEN_BLOCKOPEN",
+    	"TOKEN_BLOCKCLOSE",
+    	"TOKEN_EQUALSIGN",
 	"TOKEN_STRING",
-    "TOKEN_FUNCARROW",
-    "ERROR"
+   	"TOKEN_FUNCARROW",
+    	"ERROR"
 	};
-token::token()
-{
+
+token::token() {
     this->lexeme = "";
     this->tokenType = TokenType::ERROR;
 }
-token::token(string lexeme, TokenType tokenType)
-{
+
+token::token(string lexeme, TokenType tokenType) {
     this->lexeme = lexeme;
     this->tokenType = tokenType;
 }
-void token::Print()
-{
+
+void token::Print() {
     cout << "{" << lexeme << " , "
         << reserved[(int)tokenType] << "}\n";
 }
-int lexer::getCurrentPointer()
-{
+
+int lexer::getCurrentPointer() {
     return index;
 }
-void lexer::setCurrentPointer(int pos)
-{
+
+void lexer::setCurrentPointer(int pos) {
     if (pos >= 0 && pos < tokens.size())
         index = pos;
     else
@@ -279,10 +280,8 @@ void outputTokens(vector<token> &tokens) {
     fout.close();
 }
 
-void lexer::Tokenize()//function that tokenizes your input stream
-{
+void lexer::Tokenize() {
     vector<char>::iterator it = stream.begin();
-	//your implementation goes here
     int line = 1;
     while(it != stream.end())
     {
@@ -309,12 +308,11 @@ void lexer::Tokenize()//function that tokenizes your input stream
         ++it;
     }
     
-	//push_back EOF token at end to identify End of File
+    //push_back EOF token at end to identify End of File
     tokens.push_back(token(string(""), TokenType::END_OF_FILE));
 }
 
-lexer::lexer(const char filename[])
-{
+lexer::lexer(const char filename[]) {
     //constructors: takes file name as an argument and store all
     //the contents of file into the class varible stream
     ifstream fin(filename);
@@ -338,12 +336,12 @@ lexer::lexer(const char filename[])
         index = 0;
     }
 }
-lexer::lexer()
-{
+
+lexer::lexer() {
     index = -1;
 }
-void lexer::printRaw()
-{
+
+void lexer::printRaw() {
     //helper function to print the content of file
     vector<char>::iterator it = stream.begin();
     for (it = stream.begin(); it != stream.end(); it++)
@@ -352,8 +350,8 @@ void lexer::printRaw()
     }
     cout << endl;
 }
-token lexer::getNextToken()
-{
+
+token lexer::getNextToken() {
     //this function will return single (token,lexeme) pair on each call
     //this is an iterator which is pointing to the beginning of vector of tokens
     token _token;
@@ -369,12 +367,12 @@ token lexer::getNextToken()
     }
     return _token;
 }
-void lexer::resetPointer()
-{
+
+void lexer::resetPointer() {
     index = 0;
 }
-token lexer::peek(int howFar)
-{
+
+token lexer::peek(int howFar) {
     if (howFar <= 0)
     { // peeking backward or in place is not allowed
         cout << "LexicalAnalyzer:peek:Error: non positive argument\n";
