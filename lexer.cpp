@@ -3,8 +3,8 @@ using namespace std;
 
 //for printing tokens names, Same as the enum defined in lexer.h
 string reserved[] = {
-    	"END_OF_FILE",
-    	"TOKEN_IDENTIFIER",
+    "END_OF_FILE",
+    "TOKEN_IDENTIFIER",
  	"TOKEN_NUMBER",
  	"TOKEN_VARIABLE",
  	"TOKEN_FUNCTION",
@@ -35,12 +35,12 @@ string reserved[] = {
  	"TOKEN_DIVIDE", 
  	"TOKEN_MULTIPLY",
  	"TOKEN_MODULUS",
-    	"TOKEN_BLOCKOPEN",
-    	"TOKEN_BLOCKCLOSE",
-    	"TOKEN_EQUALSIGN",
+    "TOKEN_BLOCKOPEN",
+    "TOKEN_BLOCKCLOSE",
+    "TOKEN_EQUALSIGN",
 	"TOKEN_STRING",
    	"TOKEN_FUNCARROW",
-    	"ERROR"
+    "ERROR"
 	};
 
 token::token() {
@@ -69,206 +69,209 @@ void lexer::setCurrentPointer(int pos) {
         index = 0;
 }
 
-void skipSpaces(vector<char>::iterator &it,int &line) {
-     if (*it == ' ' || *it == '\t' || *it == '\n') {
-            if (*it++ == '\n')
-                ++line;
-        }
-}
-
-void checkComments(vector<char>::iterator &it,int &line,vector<token> &tokens) {
-    if (*it == '#') {
-        ++it;
-        if(*it == '~') {
-            ++it;
-            while (*it != '~' && (*it+1) != '#'){
-                ++it;
-                if (*it == '\0')
-                    tokens.push_back(token("comment not ended",TokenType::ERROR));
-
-                if (*it == '\n')
+namespace LexerUtils {
+    void skipSpaces(vector<char>::iterator &it,int &line) {
+         if (*it == ' ' || *it == '\t' || *it == '\n') {
+                if (*it++ == '\n')
                     ++line;
-            };
-            it+=2;
-        }
-    }
-}
-
-void functionSymbol(vector<char>::iterator &it, vector<token> &tokens) {
-     if (*it=='<') {
-        it++;
-        if (*it=='-'){
-            tokens.push_back(token("<-",TokenType::TOKEN_FUNCARROW));
-        }
-        it++;
-     }
-}
-
-void booleanOps(vector<char>::iterator &it, vector<token> &tokens){
-     if (*it=='-') {
-            it++;
-            if (*it=='e'){
-                it++;
-                if (*it=='q') {
-                    tokens.push_back(token("eq",TokenType::TOKEN_EQUAL));
-                    *it++;
-                }
-            }
-            else if (*it=='n'){
-                it++;
-                if (*it=='e') {
-                    tokens.push_back(token("ne",TokenType::TOKEN_NOTEQUAL));
-                    *it++;
-                }
-            }
-            else if (*it=='l'){
-                it++;
-                if (*it=='t') {
-                    tokens.push_back(token("lt",TokenType::TOKEN_LESS));
-                    *it++;
-                }
-            }
-            else if (*it=='l'){
-                it++;
-                if (*it=='e') {
-                    tokens.push_back(token("le",TokenType::TOKEN_LESSEQUAL));
-                    *it++;
-                }
-            }
-            else if (*it=='g'){
-                it++;
-                if (*it=='t') {
-                    tokens.push_back(token("gt",TokenType::TOKEN_GREATER));
-                    *it++;
-                }
-            }
-           else if (*it=='g'){
-                it++;
-                if (*it=='e') {
-                    tokens.push_back(token("ge",TokenType::TOKEN_GREATEREQUAL));
-                    *it++;
-                }
             }
     }
-}
 
-void checkVariable(vector<char>::iterator &it, vector<token> &tokens) {
-    if (*it=='$') {
-        it++;
-        string vars;
-        if (isalpha(*it) || *it=='_') {
-            while (isalpha(*it) || *it=='_' || isdigit(*it))
-            {
-                vars.push_back(*it);
-                it++;
-            }
-            tokens.push_back(token(vars, TokenType::TOKEN_VARIABLE));
-        }else{
-            tokens.push_back(token("Variable format incorrect", TokenType::ERROR));
-        }
-    }
-}
-
-void checkString(vector<char>::iterator &it, vector<token> &tokens) {
-    //double quote string
-    if (*it=='"') {
-        it++;
-        string literal;
-        while(*it != '"'){
-            literal.push_back(*it);
-            it++;
-        }
-        tokens.push_back(token(literal,TokenType::TOKEN_STRING));
-        it++;
-    }
-    //single quote string
-    if (*it=='\'') {
-        it++;
-        string literal;
-        while(*it != '\''){
-            literal.push_back(*it);
-            it++;
-        }
-        tokens.push_back(token(literal,TokenType::TOKEN_STRING));
-        it++;
-    }
-}
-
-void checkIdentifierOrKeyword(vector<char>::iterator &it, vector<token> &tokens) {
-     if (isalpha(*it) || *it == '_'){
-        string identifier;
-        identifier.push_back(*it);
-        while (isdigit(*it) || isalpha(*it) || *it == '_'){
+    void checkComments(vector<char>::iterator &it,int &line,vector<token> &tokens) {
+        if (*it == '#') {
             ++it;
-            identifier.push_back(*it);
+            if(*it == '~') {
+                ++it;
+                while (*it != '~' && (*it+1) != '#'){
+                    ++it;
+                    if (*it == '\0')
+                        tokens.push_back(token("comment not ended",TokenType::ERROR));
+
+                    if (*it == '\n')
+                        ++line;
+                };
+                it+=2;
+            }
         }
-        identifier.pop_back();
-
-        if (identifier.compare("function")==0)
-            tokens.push_back(token(identifier,TokenType::TOKEN_FUNCTION));
-        else if (identifier.compare("int")==0)
-            tokens.push_back(token(identifier,TokenType::TOKEN_INT));
-        else if (identifier.compare("if")==0)
-            tokens.push_back(token(identifier,TokenType::TOKEN_IF));
-        else if (identifier.compare("else")==0)
-            tokens.push_back(token(identifier,TokenType::TOKEN_ELSE));
-        else if (identifier.compare("do")==0)
-            tokens.push_back(token(identifier,TokenType::TOKEN_DO));
-        else if (identifier.compare("until")==0)
-            tokens.push_back(token(identifier,TokenType::TOKEN_UNTIL));
-        else if (identifier.compare("then")==0)
-            tokens.push_back(token(identifier,TokenType::TOKEN_THEN));
-        else if (identifier.compare("read")==0)
-            tokens.push_back(token(identifier,TokenType::TOKEN_READ));
-        else if (identifier.compare("display")==0)
-            tokens.push_back(token(identifier,TokenType::TOKEN_DISPLAY));
-        else if (identifier.compare("displayline")==0)
-            tokens.push_back(token(identifier,TokenType::TOKEN_DISPLAYLINE));
-        else if (identifier.compare("return")==0)
-            tokens.push_back(token(identifier,TokenType::TOKEN_RETURN));
-        else 
-            tokens.push_back(token(identifier,TokenType::TOKEN_IDENTIFIER));
     }
-}
 
-void checkNumbers(vector<char>::iterator &it, vector<token> &tokens) {
-      if (isdigit(*it)) {
-        string num;
-        while (isdigit(*it)) {
-            num.push_back(*it);
+    void functionSymbol(vector<char>::iterator &it, vector<token> &tokens) {
+         if (*it=='<') {
+            it++;
+            if (*it=='-'){
+                tokens.push_back(token("<-",TokenType::TOKEN_FUNCARROW));
+            }
+            it++;
+         }
+    }
+
+    void booleanOps(vector<char>::iterator &it, vector<token> &tokens){
+         if (*it=='-') {
+                it++;
+                if (*it=='e'){
+                    it++;
+                    if (*it=='q') {
+                        tokens.push_back(token("eq",TokenType::TOKEN_EQUAL));
+                        *it++;
+                    }
+                }
+                else if (*it=='n'){
+                    it++;
+                    if (*it=='e') {
+                        tokens.push_back(token("ne",TokenType::TOKEN_NOTEQUAL));
+                        *it++;
+                    }
+                }
+                else if (*it=='l'){
+                    it++;
+                    if (*it=='t') {
+                        tokens.push_back(token("lt",TokenType::TOKEN_LESS));
+                        *it++;
+                    }
+                }
+                else if (*it=='l'){
+                    it++;
+                    if (*it=='e') {
+                        tokens.push_back(token("le",TokenType::TOKEN_LESSEQUAL));
+                        *it++;
+                    }
+                }
+                else if (*it=='g'){
+                    it++;
+                    if (*it=='t') {
+                        tokens.push_back(token("gt",TokenType::TOKEN_GREATER));
+                        *it++;
+                    }
+                }
+               else if (*it=='g'){
+                    it++;
+                    if (*it=='e') {
+                        tokens.push_back(token("ge",TokenType::TOKEN_GREATEREQUAL));
+                        *it++;
+                    }
+                }
+        }
+    }
+
+    void checkVariable(vector<char>::iterator &it, vector<token> &tokens) {
+        if (*it=='$') {
+            it++;
+            string vars;
+            if (isalpha(*it) || *it=='_') {
+                while (isalpha(*it) || *it=='_' || isdigit(*it))
+                {
+                    vars.push_back(*it);
+                    it++;
+                }
+                tokens.push_back(token(vars, TokenType::TOKEN_VARIABLE));
+            }else{
+                tokens.push_back(token("Variable format incorrect", TokenType::ERROR));
+            }
+        }
+    }
+    
+    void checkString(vector<char>::iterator &it, vector<token> &tokens) {
+        //double quote string
+        if (*it=='"') {
+            it++;
+            string literal;
+            while(*it != '"'){
+                literal.push_back(*it);
+                it++;
+            }
+            tokens.push_back(token(literal,TokenType::TOKEN_STRING));
             it++;
         }
-        tokens.push_back(token(num,TokenType::TOKEN_NUMBER));
+        //single quote string
+        if (*it=='\'') {
+            it++;
+            string literal;
+            while(*it != '\''){
+                literal.push_back(*it);
+                it++;
+            }
+            tokens.push_back(token(literal,TokenType::TOKEN_STRING));
+            it++;
+        }
     }
-}
+    
+    void checkIdentifierOrKeyword(vector<char>::iterator &it, vector<token> &tokens) {
+         if (isalpha(*it) || *it == '_'){
+            string identifier;
+            identifier.push_back(*it);
+            while (isdigit(*it) || isalpha(*it) || *it == '_'){
+                ++it;
+                identifier.push_back(*it);
+            }
+            identifier.pop_back();
+    
+            if (identifier.compare("function")==0)
+                tokens.push_back(token(identifier,TokenType::TOKEN_FUNCTION));
+            else if (identifier.compare("int")==0)
+                tokens.push_back(token(identifier,TokenType::TOKEN_INT));
+            else if (identifier.compare("if")==0)
+                tokens.push_back(token(identifier,TokenType::TOKEN_IF));
+            else if (identifier.compare("else")==0)
+                tokens.push_back(token(identifier,TokenType::TOKEN_ELSE));
+            else if (identifier.compare("do")==0)
+                tokens.push_back(token(identifier,TokenType::TOKEN_DO));
+            else if (identifier.compare("until")==0)
+                tokens.push_back(token(identifier,TokenType::TOKEN_UNTIL));
+            else if (identifier.compare("then")==0)
+                tokens.push_back(token(identifier,TokenType::TOKEN_THEN));
+            else if (identifier.compare("read")==0)
+                tokens.push_back(token(identifier,TokenType::TOKEN_READ));
+            else if (identifier.compare("display")==0)
+                tokens.push_back(token(identifier,TokenType::TOKEN_DISPLAY));
+            else if (identifier.compare("displayline")==0)
+                tokens.push_back(token(identifier,TokenType::TOKEN_DISPLAYLINE));
+            else if (identifier.compare("return")==0)
+                tokens.push_back(token(identifier,TokenType::TOKEN_RETURN));
+            else 
+                tokens.push_back(token(identifier,TokenType::TOKEN_IDENTIFIER));
+        }
+    }
 
-void checkSpecialCharacters(vector<char>::iterator &it, vector<token> &tokens) {
-    if(*it==',')
-        tokens.push_back(token(",",TokenType::TOKEN_COMMA));
-    else if (*it==';')
-        tokens.push_back(token(";",TokenType::TOKEN_SEMICOLON));
-    else if (*it==':')
-        tokens.push_back(token(":",TokenType::TOKEN_COLON));
-    else if (*it=='+')
-            tokens.push_back(token("+",TokenType::TOKEN_PLUS));
-    else if (*it=='-')
-            tokens.push_back(token("-",TokenType::TOKEN_MINUS));
-    else if (*it=='*')
-            tokens.push_back(token("*",TokenType::TOKEN_MULTIPLY));
-    else if (*it=='/')
-            tokens.push_back(token("/",TokenType::TOKEN_DIVIDE));
-    else if (*it=='%')
-            tokens.push_back(token("%",TokenType::TOKEN_MODULUS));
-    else if (*it=='(')
-            tokens.push_back(token("(",TokenType::TOKEN_OPENPARANTHESIS));
-    else if (*it==')')
-            tokens.push_back(token(")",TokenType::TOKEN_CLOSEPARANTHESIS));
-    else if (*it=='{')
-            tokens.push_back(token("{",TokenType::TOKEN_BLOCKOPEN));
-    else if (*it=='}')
-            tokens.push_back(token("}",TokenType::TOKEN_BLOCKCLOSE));
-    else if (*it=='=')
-            tokens.push_back(token("=",TokenType::TOKEN_EQUALSIGN));
+    void checkNumbers(vector<char>::iterator &it, vector<token> &tokens) {
+          if (isdigit(*it)) {
+            string num;
+            while (isdigit(*it)) {
+                num.push_back(*it);
+                it++;
+            }
+            tokens.push_back(token(num,TokenType::TOKEN_NUMBER));
+        }
+    }
+
+    void checkSpecialCharacters(vector<char>::iterator &it, vector<token> &tokens) {
+        if(*it==',')
+            tokens.push_back(token(",",TokenType::TOKEN_COMMA));
+        else if (*it==';')
+            tokens.push_back(token(";",TokenType::TOKEN_SEMICOLON));
+        else if (*it==':')
+                tokens.push_back(token(":",TokenType::TOKEN_COLON));
+        else if (*it=='+')
+                tokens.push_back(token("+",TokenType::TOKEN_PLUS));
+        else if (*it=='-')
+                tokens.push_back(token("-",TokenType::TOKEN_MINUS));
+        else if (*it=='*')
+                tokens.push_back(token("*",TokenType::TOKEN_MULTIPLY));
+        else if (*it=='/')
+                tokens.push_back(token("/",TokenType::TOKEN_DIVIDE));
+        else if (*it=='%')
+                tokens.push_back(token("%",TokenType::TOKEN_MODULUS));
+        else if (*it=='(')
+                tokens.push_back(token("(",TokenType::TOKEN_OPENPARANTHESIS));
+        else if (*it==')')
+                tokens.push_back(token(")",TokenType::TOKEN_CLOSEPARANTHESIS));
+        else if (*it=='{')
+                tokens.push_back(token("{",TokenType::TOKEN_BLOCKOPEN));
+        else if (*it=='}')
+                tokens.push_back(token("}",TokenType::TOKEN_BLOCKCLOSE));
+        else if (*it=='=')
+                tokens.push_back(token("=",TokenType::TOKEN_EQUALSIGN));
+    }
+    
 }
 
 void outputTokens(vector<token> &tokens) {
@@ -286,23 +289,23 @@ void lexer::Tokenize() {
     while(it != stream.end())
     {
         // Skip whitespace
-        skipSpaces(it, line);
+        LexerUtils::skipSpaces(it, line);
         // Comments
-        checkComments(it, line, tokens);
+        LexerUtils::checkComments(it, line, tokens);
         // Function Symbol
-        functionSymbol(it, tokens);
+        LexerUtils::functionSymbol(it, tokens);
         // Boolean Operations
-        booleanOps(it, tokens);
+        LexerUtils::booleanOps(it, tokens);
         // Variables
-        checkVariable(it, tokens);
+        LexerUtils::checkVariable(it, tokens);
         // Strings
-        checkString(it, tokens);
+        LexerUtils::checkString(it, tokens);
         // Identifier or keyword
-        checkIdentifierOrKeyword(it, tokens);
+        LexerUtils::checkIdentifierOrKeyword(it, tokens);
         // Numbers
-        checkNumbers(it, tokens);
+        LexerUtils::checkNumbers(it, tokens);
         // Special Characters
-        checkSpecialCharacters(it, tokens);
+        LexerUtils::checkSpecialCharacters(it, tokens);
         // Output file
         outputTokens(tokens);
         ++it;
