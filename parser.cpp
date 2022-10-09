@@ -70,6 +70,9 @@ bool parser::statements()
                 expect(TokenType::TOKEN_INT);
             }
         }
+        expect(TokenType::TOKEN_BLOCKOPEN);
+        statements();
+        expect(TokenType::TOKEN_BLOCKCLOSE);
     }
     cout<<"not found\n";
     return false;
