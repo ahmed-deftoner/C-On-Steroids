@@ -31,6 +31,19 @@ void parser::resetPointer()
     _lexer.resetPointer();
 }
 
+void parser::factor(){
+    switch (_lexer.peek(1).tokenType) {
+	case TokenType::TOKEN_VARIABLE:
+	case TokenType::TOKEN_NUMBER:
+		_lexer.getNextToken();
+		break;
+	case TokenType::TOKEN_OPENPARANTHESIS:
+		expect(TokenType::TOKEN_OPENPARANTHESIS);
+		expression();
+		expect(TokenType::TOKEN_CLOSEPARANTHESIS);
+	}
+}
+
 void parser::term(){
     factor();
     while (_lexer.peek(1).tokenType == TokenType::TOKEN_MULTIPLY || _lexer.peek(1).tokenType == TokenType::TOKEN_DIVIDE)
@@ -39,6 +52,7 @@ void parser::term(){
         factor();
     }
 }
+
 void parser::expression() {
     if (_lexer.peek(1).tokenType == TokenType::TOKEN_PLUS || _lexer.peek(1).tokenType == TokenType::TOKEN_MINUS) {
         _lexer.getNextToken();
