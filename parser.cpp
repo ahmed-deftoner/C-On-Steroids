@@ -46,6 +46,7 @@ bool parser::statements()
             expect(TokenType::TOKEN_COLON);
             expect(TokenType::TOKEN_INT);
         }
+        expect(TokenType::TOKEN_SEMICOLON);
     }
     
     //statements-- > COLON LPAREN start RPAREN
@@ -62,8 +63,10 @@ bool parser::statements()
             expect(TokenType::TOKEN_VARIABLE);
             expect(TokenType::TOKEN_COLON);
             expect(TokenType::TOKEN_INT);
+            cout<<"func\n";
             while (_lexer.peek(1).tokenType == TokenType::TOKEN_COMMA)
             {
+                cout<<"param\n";
                 expect(TokenType::TOKEN_COMMA);
                 expect(TokenType::TOKEN_VARIABLE);
                 expect(TokenType::TOKEN_COLON);
