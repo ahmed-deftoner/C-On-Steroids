@@ -34,6 +34,21 @@ void parser::resetPointer()
 //this function is for sample purposes only
 bool parser::statements()
 {
+    if (_lexer.peek(1).tokenType == TokenType::TOKEN_VARIABLE)
+    {
+        expect(TokenType::TOKEN_VARIABLE);
+        expect(TokenType::TOKEN_COLON);
+        expect(TokenType::TOKEN_INT);
+        while (_lexer.peek(1).tokenType == TokenType::TOKEN_COMMA)
+        {
+            expect(TokenType::TOKEN_COMMA);
+            expect(TokenType::TOKEN_VARIABLE);
+            expect(TokenType::TOKEN_COLON);
+            expect(TokenType::TOKEN_INT);
+        }
+        
+    }
+    
     //statements-- > COLON LPAREN start RPAREN
     if (_lexer.peek(1).tokenType == TokenType::TOKEN_IDENTIFIER)
     {
