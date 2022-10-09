@@ -50,8 +50,53 @@ bool parser::statements()
                     if (_lexer.peek(1).tokenType == TokenType::TOKEN_FUNCTION)
                     {
                         expect(TokenType::TOKEN_FUNCTION);
-                        cout<<"found\n";
-                        return true;
+                        if (_lexer.peek(1).tokenType == TokenType::TOKEN_OPENPARANTHESIS)
+                        {
+                            expect(TokenType::TOKEN_OPENPARANTHESIS);
+                            while (_lexer.peek(1).tokenType == TokenType::TOKEN_VARIABLE) {
+                                expect(TokenType::TOKEN_VARIABLE);
+                                if (_lexer.peek(1).tokenType == TokenType::TOKEN_COLON)
+                                {
+                                    expect(TokenType::TOKEN_COLON);
+                                    if (_lexer.peek(1).tokenType == TokenType::TOKEN_INT)
+                                    {
+                                        expect(TokenType::TOKEN_INT);
+                                        while (_lexer.peek(1).tokenType == TokenType::TOKEN_COMMA)
+                                        {
+                                            expect(TokenType::TOKEN_COMMA);
+                                            if (_lexer.peek(1).tokenType == TokenType::TOKEN_VARIABLE) {
+                                                expect(TokenType::TOKEN_VARIABLE);
+                                                if (_lexer.peek(1).tokenType == TokenType::TOKEN_COLON)
+                                                {
+                                                    expect(TokenType::TOKEN_COLON);
+                                                    if (_lexer.peek(1).tokenType == TokenType::TOKEN_INT)
+                                                    {
+                                                        expect(TokenType::TOKEN_INT);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        
+                                    }
+                                    
+                                }
+                                
+                            }
+                            
+                            if (_lexer.peek(1).tokenType == TokenType::TOKEN_CLOSEPARANTHESIS)
+                            {
+                                expect(TokenType::TOKEN_CLOSEPARANTHESIS);
+                                if (_lexer.peek(1).tokenType == TokenType::TOKEN_BLOCKOPEN)
+                                {
+                                    expect(TokenType::TOKEN_BLOCKOPEN);
+                                                
+                                    cout<<"found\n";
+                                    return true;
+                                }
+                                
+                            }
+                            
+                        }
                     }
                     
                 }
