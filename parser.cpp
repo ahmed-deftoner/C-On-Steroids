@@ -31,6 +31,18 @@ void parser::resetPointer()
     _lexer.resetPointer();
 }
 
+void parser::expression() {
+    if (_lexer.peek(1).tokenType == TokenType::TOKEN_PLUS || _lexer.peek(1).tokenType == TokenType::TOKEN_MINUS) {
+        _lexer.getNextToken();
+    }
+    term();
+    while (_lexer.peek(1).tokenType == TokenType::TOKEN_PLUS || _lexer.peek(1).tokenType == TokenType::TOKEN_MINUS)
+    {
+        _lexer.getNextToken();
+        term();
+    }
+}
+
 //this function is for sample purposes only
 bool parser::statements()
 {
@@ -42,7 +54,7 @@ bool parser::statements()
         if (_lexer.peek(1).tokenType == TokenType::TOKEN_EQUALSIGN)
         {
             expect(TokenType::TOKEN_EQUALSIGN);
-
+            expression();
         }
         /*
         while (_lexer.peek(1).tokenType == TokenType::TOKEN_COMMA)
