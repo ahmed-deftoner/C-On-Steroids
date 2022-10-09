@@ -1,4 +1,4 @@
-calculateFib: int <- function($n: int){
+calculateFib: int <- function($n:int){
 	#~variable declarations, note z is not initialized~#
     $x:int = 0;
     $y:int = 0;
@@ -7,7 +7,7 @@ calculateFib: int <- function($n: int){
     if (n -lt 0) then {
         displayline:'negative number entered';
         return:0;
-    else if (n -eq 0) then {
+    } else if (n -eq 0) then {
         displayline:"it's 0 man!"
         return:0;
     } else {
