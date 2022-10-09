@@ -39,13 +39,19 @@ bool parser::statements()
         expect(TokenType::TOKEN_VARIABLE);
         expect(TokenType::TOKEN_COLON);
         expect(TokenType::TOKEN_INT);
+        if (_lexer.peek(1).tokenType == TokenType::TOKEN_EQUALSIGN)
+        {
+            expect(TokenType::TOKEN_EQUALSIGN);
+
+        }
+        /*
         while (_lexer.peek(1).tokenType == TokenType::TOKEN_COMMA)
         {
             expect(TokenType::TOKEN_COMMA);
             expect(TokenType::TOKEN_VARIABLE);
             expect(TokenType::TOKEN_COLON);
             expect(TokenType::TOKEN_INT);
-        }
+        }*/
         expect(TokenType::TOKEN_SEMICOLON);
     }
     
