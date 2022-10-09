@@ -31,6 +31,14 @@ void parser::resetPointer()
     _lexer.resetPointer();
 }
 
+void parser::term(){
+    factor();
+    while (_lexer.peek(1).tokenType == TokenType::TOKEN_MULTIPLY || _lexer.peek(1).tokenType == TokenType::TOKEN_DIVIDE)
+    {
+        _lexer.getNextToken();
+        factor();
+    }
+}
 void parser::expression() {
     if (_lexer.peek(1).tokenType == TokenType::TOKEN_PLUS || _lexer.peek(1).tokenType == TokenType::TOKEN_MINUS) {
         _lexer.getNextToken();

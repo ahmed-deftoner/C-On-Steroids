@@ -13,6 +13,8 @@ public:
     void resetPointer();
     bool statements();
     void expression();
+    void term();
+    void factor();
     /*Terminal functions goes here use peek and expect*/
     /*use TokenType:: for token names for example
         expect(TokenType::ASSIGN);   //example function call
