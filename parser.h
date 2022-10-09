@@ -11,6 +11,7 @@ public:
     parser(const char filename[]);
     void readAndPrintAllInput();
     void resetPointer();
+    bool statements();
     /*Terminal functions goes here use peek and expect*/
     /*use TokenType:: for token names for example
         expect(TokenType::ASSIGN);   //example function call

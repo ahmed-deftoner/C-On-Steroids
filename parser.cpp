@@ -30,24 +30,35 @@ void parser::resetPointer()
 {
     _lexer.resetPointer();
 }
+
 //this function is for sample purposes only
-/*
 bool parser::statements()
 {
     //statements-- > COLON LPAREN start RPAREN
-    if (_lexer.peek(1).tokenType == TokenType::COLON)
+    if (_lexer.peek(1).tokenType == TokenType::TOKEN_IDENTIFIER)
     {
-        expect(TokenType::COLON);
-        if (_lexer.peek(1).tokenType == TokenType::LPAREN)
+        expect(TokenType::TOKEN_IDENTIFIER);
+        if (_lexer.peek(1).tokenType == TokenType::TOKEN_COLON)
         {
-            expect(TokenType::LPAREN);
-            start();
-            if (_lexer.peek(1).tokenType == TokenType::RPAREN)
+            expect(TokenType::TOKEN_COLON);
+            if (_lexer.peek(1).tokenType == TokenType::TOKEN_INT)
             {
-                expect(TokenType::RPAREN);
-                return true;
+                expect(TokenType::TOKEN_INT);
+                if (_lexer.peek(1).tokenType == TokenType::TOKEN_FUNCARROW)
+                {
+                    expect(TokenType::TOKEN_FUNCARROW);
+                    if (_lexer.peek(1).tokenType == TokenType::TOKEN_FUNCTION)
+                    {
+                        expect(TokenType::TOKEN_FUNCTION);
+                        cout<<"found\n";
+                        return true;
+                    }
+                    
+                }
+                
             }
         }
     }
+    cout<<"not found\n";
     return false;
-}*/ 
+}
