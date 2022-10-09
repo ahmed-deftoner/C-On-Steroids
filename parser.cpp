@@ -31,6 +31,23 @@ void parser::resetPointer()
     _lexer.resetPointer();
 }
 
+void parser::condition(){
+    expression();
+	switch (_lexer.peek(1).tokenType) {
+		case TokenType::TOKEN_EQUAL:
+		case TokenType::TOKEN_LESS:
+		case TokenType::TOKEN_LESSEQUAL:
+		case TokenType::TOKEN_GREATER:
+		case TokenType::TOKEN_GREATEREQUAL:
+		case TokenType::TOKEN_NOTEQUAL:
+			_lexer.getNextToken();
+			break;
+		default:
+		    syntax_error();
+		}
+		expression();
+}
+
 void parser::factor(){
     switch (_lexer.peek(1).tokenType) {
 	case TokenType::TOKEN_VARIABLE:

@@ -15,6 +15,7 @@ public:
     void expression();
     void term();
     void factor();
+    void condition();
     /*Terminal functions goes here use peek and expect*/
     /*use TokenType:: for token names for example
         expect(TokenType::ASSIGN);   //example function call
