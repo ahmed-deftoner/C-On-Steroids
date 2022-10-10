@@ -106,11 +106,15 @@ void parser::statements() {
 		statements();
 		expect(TokenType::TOKEN_BLOCKCLOSE);
 		break;
-	case TOK_WHILE:
-		expect(TOK_WHILE);
+	case TokenType::TOKEN_DO:
+		expect(TokenType::TOKEN_DO);
+		expect(TokenType::TOKEN_UNTIL);
+		expect(TokenType::TOKEN_OPENPARANTHESIS);
 		condition();
-		expect(TOK_DO);
-		statement();
+		expect(TokenType::TOKEN_CLOSEPARANTHESIS);
+		expect(TokenType::TOKEN_BLOCKOPEN);
+		statements();
+		expect(TokenType::TOKEN_BLOCKCLOSE);
 	}
 }
 
