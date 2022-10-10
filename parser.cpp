@@ -84,6 +84,11 @@ void parser::expression() {
 
 void parser::statements() {
     switch (_lexer.peek(1).tokenType) {
+    case TokenType::TOKEN_VARIABLE:
+		expect(TokenType::TOKEN_VARIABLE);
+		expect(TokenType::TOKEN_EQUALSIGN);
+		expression();
+		break;
 	case TokenType::TOKEN_DISPLAYLINE:
 		expect(TokenType::TOKEN_DISPLAYLINE);
 		expect(TokenType::TOKEN_COLON);
