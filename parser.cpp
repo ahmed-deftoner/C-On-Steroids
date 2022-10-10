@@ -8,8 +8,10 @@ void parser::syntax_error()
 token parser::expect(TokenType expected_type)
 {
     token t = _lexer.getNextToken();
-    if (t.tokenType != expected_type)
+    if (t.tokenType != expected_type){
+        t.Print();
         syntax_error();
+    }
     return t;
 }
 parser::parser(const char filename[])
@@ -52,7 +54,9 @@ void parser::factor(){
     switch (_lexer.peek(1).tokenType) {
 	case TokenType::TOKEN_VARIABLE:
 	case TokenType::TOKEN_NUMBER:
-		_lexer.getNextToken();
+        expect(TokenType::TOKEN_NUMBER);
+        cout<<"num\n";
+		//_lexer.getNextToken();
 		break;
 	case TokenType::TOKEN_OPENPARANTHESIS:
 		expect(TokenType::TOKEN_OPENPARANTHESIS);
@@ -72,6 +76,7 @@ void parser::term(){
 
 void parser::expression() {
     if (_lexer.peek(1).tokenType == TokenType::TOKEN_PLUS || _lexer.peek(1).tokenType == TokenType::TOKEN_MINUS) {
+        cout<<"plus minus\n";
         _lexer.getNextToken();
     }
     term();
@@ -86,20 +91,38 @@ void parser::statements() {
     switch (_lexer.peek(1).tokenType) {
     case TokenType::TOKEN_VARIABLE:
 		expect(TokenType::TOKEN_VARIABLE);
-		expect(TokenType::TOKEN_EQUALSIGN);
-		expression();
+        expect(TokenType::TOKEN_COLON);
+        expect(TokenType::TOKEN_INT);
+        if (_lexer.peek(1).tokenType == TokenType::TOKEN_EQUALSIGN)
+        {
+            expect(TokenType::TOKEN_EQUALSIGN);
+            expression();
+        }
+        else if (_lexer.peek(1).tokenType == TokenType::TOKEN_COMMA) {
+            while (_lexer.peek(1).tokenType == TokenType::TOKEN_COMMA)
+            {
+                expect(TokenType::TOKEN_COMMA);
+                expect(TokenType::TOKEN_VARIABLE);
+                expect(TokenType::TOKEN_COLON);
+                expect(TokenType::TOKEN_INT);
+            }
+        }
+        expect(TokenType::TOKEN_SEMICOLON);
+        cout<<"var\n";
 		break;
 	case TokenType::TOKEN_DISPLAYLINE:
 		expect(TokenType::TOKEN_DISPLAYLINE);
 		expect(TokenType::TOKEN_COLON);
         expect(TokenType::TOKEN_STRING);
         expect(TokenType::TOKEN_SEMICOLON);
+        cout<<"displayline\n";
 		break;
 	case TokenType::TOKEN_DISPLAY:
 		expect(TokenType::TOKEN_DISPLAY);
 		expect(TokenType::TOKEN_COLON);
         expect(TokenType::TOKEN_STRING);
         expect(TokenType::TOKEN_SEMICOLON);
+        cout<<"display\n";
 		break;
 	case TokenType::TOKEN_IF:
 		expect(TokenType::TOKEN_IF);
@@ -108,6 +131,7 @@ void parser::statements() {
         expect(TokenType::TOKEN_CLOSEPARANTHESIS);
 		expect(TokenType::TOKEN_THEN);
 		expect(TokenType::TOKEN_BLOCKOPEN);
+        cout<<"if\n";
 		statements();
 		expect(TokenType::TOKEN_BLOCKCLOSE);
 		break;
@@ -122,6 +146,7 @@ void parser::statements() {
             expect(TokenType::TOKEN_THEN);
         }
         expect(TokenType::TOKEN_BLOCKOPEN);
+        cout<<"else\n";
 		statements();
 		expect(TokenType::TOKEN_BLOCKCLOSE);
 		break;
@@ -132,8 +157,10 @@ void parser::statements() {
 		condition();
 		expect(TokenType::TOKEN_CLOSEPARANTHESIS);
 		expect(TokenType::TOKEN_BLOCKOPEN);
+        cout<<"do\n";
 		statements();
 		expect(TokenType::TOKEN_BLOCKCLOSE);
+        break;
 	}
 }
 
@@ -164,7 +191,7 @@ void parser::block()
     }*/
     
     //statements-- > COLON LPAREN start RPAREN
-    if (_lexer.peek(1).tokenType == TokenType::TOKEN_IDENTIFIER)
+    while (_lexer.peek(1).tokenType == TokenType::TOKEN_IDENTIFIER)
     {
         expect(TokenType::TOKEN_IDENTIFIER);
         expect(TokenType::TOKEN_COLON);
@@ -177,7 +204,6 @@ void parser::block()
             expect(TokenType::TOKEN_VARIABLE);
             expect(TokenType::TOKEN_COLON);
             expect(TokenType::TOKEN_INT);
-            cout<<"func\n";
             while (_lexer.peek(1).tokenType == TokenType::TOKEN_COMMA)
             {
                 expect(TokenType::TOKEN_COMMA);
@@ -186,7 +212,9 @@ void parser::block()
                 expect(TokenType::TOKEN_INT);
             }
         }
+        expect(TokenType::TOKEN_CLOSEPARANTHESIS);
         expect(TokenType::TOKEN_BLOCKOPEN);
+        cout<<"func\n";
         block();
         expect(TokenType::TOKEN_BLOCKCLOSE);
     }

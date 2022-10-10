@@ -307,12 +307,12 @@ void lexer::Tokenize() {
         // Special Characters
         LexerUtils::checkSpecialCharacters(it, tokens);
         // Output file
-        outputTokens(tokens);
         ++it;
     }
     
     //push_back EOF token at end to identify End of File
     tokens.push_back(token(string(""), TokenType::END_OF_FILE));
+    outputTokens(tokens);
 }
 
 lexer::lexer(const char filename[]) {
