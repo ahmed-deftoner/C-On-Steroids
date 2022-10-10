@@ -83,7 +83,7 @@ void parser::expression() {
 }
 
 //this function is for sample purposes only
-bool parser::statements()
+void parser::block()
 {
     if (_lexer.peek(1).tokenType == TokenType::TOKEN_VARIABLE)
     {
@@ -95,14 +95,15 @@ bool parser::statements()
             expect(TokenType::TOKEN_EQUALSIGN);
             expression();
         }
-        /*
-        while (_lexer.peek(1).tokenType == TokenType::TOKEN_COMMA)
-        {
-            expect(TokenType::TOKEN_COMMA);
-            expect(TokenType::TOKEN_VARIABLE);
-            expect(TokenType::TOKEN_COLON);
-            expect(TokenType::TOKEN_INT);
-        }*/
+        else if (_lexer.peek(1).tokenType == TokenType::TOKEN_COMMA) {
+            while (_lexer.peek(1).tokenType == TokenType::TOKEN_COMMA)
+            {
+                expect(TokenType::TOKEN_COMMA);
+                expect(TokenType::TOKEN_VARIABLE);
+                expect(TokenType::TOKEN_COLON);
+                expect(TokenType::TOKEN_INT);
+            }
+        }
         expect(TokenType::TOKEN_SEMICOLON);
     }
     
@@ -131,9 +132,8 @@ bool parser::statements()
             }
         }
         expect(TokenType::TOKEN_BLOCKOPEN);
-        statements();
+        block();
         expect(TokenType::TOKEN_BLOCKCLOSE);
     }
     cout<<"not found\n";
-    return false;
 }

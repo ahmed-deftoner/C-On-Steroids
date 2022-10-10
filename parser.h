@@ -11,11 +11,12 @@ public:
     parser(const char filename[]);
     void readAndPrintAllInput();
     void resetPointer();
-    bool statements();
+    void statements();
     void expression();
     void term();
     void factor();
     void condition();
+    void block();
     /*Terminal functions goes here use peek and expect*/
     /*use TokenType:: for token names for example
         expect(TokenType::ASSIGN);   //example function call
