@@ -2,7 +2,7 @@
 
 void parser::syntax_error()
 {
-    cout << "SYNTAX ERROR\n";
+    cout << "SYNTAX ERROR\n" <<_lexer.getCurrentPointer();
     exit(1);
 }
 token parser::expect(TokenType expected_type)
@@ -111,6 +111,20 @@ void parser::statements() {
 		statements();
 		expect(TokenType::TOKEN_BLOCKCLOSE);
 		break;
+    case TokenType::TOKEN_ELSE:
+		expect(TokenType::TOKEN_ELSE);
+        if (_lexer.peek(1).tokenType == TokenType::TOKEN_IF)
+        {
+            expect(TokenType::TOKEN_IF);
+            expect(TokenType::TOKEN_OPENPARANTHESIS);
+            condition();
+            expect(TokenType::TOKEN_CLOSEPARANTHESIS);
+            expect(TokenType::TOKEN_THEN);
+        }
+        expect(TokenType::TOKEN_BLOCKOPEN);
+		statements();
+		expect(TokenType::TOKEN_BLOCKCLOSE);
+		break;
 	case TokenType::TOKEN_DO:
 		expect(TokenType::TOKEN_DO);
 		expect(TokenType::TOKEN_UNTIL);
@@ -126,6 +140,7 @@ void parser::statements() {
 //this function is for sample purposes only
 void parser::block()
 {
+    /*
     if (_lexer.peek(1).tokenType == TokenType::TOKEN_VARIABLE)
     {
         expect(TokenType::TOKEN_VARIABLE);
@@ -146,7 +161,7 @@ void parser::block()
             }
         }
         expect(TokenType::TOKEN_SEMICOLON);
-    }
+    }*/
     
     //statements-- > COLON LPAREN start RPAREN
     if (_lexer.peek(1).tokenType == TokenType::TOKEN_IDENTIFIER)
@@ -165,7 +180,6 @@ void parser::block()
             cout<<"func\n";
             while (_lexer.peek(1).tokenType == TokenType::TOKEN_COMMA)
             {
-                cout<<"param\n";
                 expect(TokenType::TOKEN_COMMA);
                 expect(TokenType::TOKEN_VARIABLE);
                 expect(TokenType::TOKEN_COLON);
@@ -176,5 +190,5 @@ void parser::block()
         block();
         expect(TokenType::TOKEN_BLOCKCLOSE);
     }
-    cout<<"not found\n";
+    statements();
 }

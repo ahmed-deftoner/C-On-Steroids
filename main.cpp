@@ -8,7 +8,7 @@ int main(int argc, char* argv[])
 	if (argc == 2)
 	{
 		parser _parser(argv[1]);
-		_parser.statements();
+		_parser.block();
 		//_lexer.printRaw();
 		/*token t;
 		t = _lexer.getNextToken();
