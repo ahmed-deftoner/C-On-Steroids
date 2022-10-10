@@ -123,6 +123,13 @@ void parser::statements() {
         expect(TokenType::TOKEN_SEMICOLON);
         cout<<"display\n";
 		break;
+    case TokenType::TOKEN_RETURN:
+		expect(TokenType::TOKEN_RETURN);
+		expect(TokenType::TOKEN_COLON);
+        expression();
+        expect(TokenType::TOKEN_SEMICOLON);
+        cout<<"return\n";
+		break;
 	case TokenType::TOKEN_IF:
 		expect(TokenType::TOKEN_IF);
         expect(TokenType::TOKEN_OPENPARANTHESIS);
