@@ -90,9 +90,11 @@ void parser::statements() {
         expect(TokenType::TOKEN_STRING);
         expect(TokenType::TOKEN_SEMICOLON);
 		break;
-	case to:
-		expect(TOK_CALL);
-		expect(TOK_IDENT);
+	case TokenType::TOKEN_DISPLAY:
+		expect(TokenType::TOKEN_DISPLAY);
+		expect(TokenType::TOKEN_COLON);
+        expect(TokenType::TOKEN_STRING);
+        expect(TokenType::TOKEN_SEMICOLON);
 		break;
 	case TOK_BEGIN:
 		expect(TOK_BEGIN);
