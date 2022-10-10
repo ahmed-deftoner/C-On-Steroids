@@ -96,20 +96,15 @@ void parser::statements() {
         expect(TokenType::TOKEN_STRING);
         expect(TokenType::TOKEN_SEMICOLON);
 		break;
-	case TOK_BEGIN:
-		expect(TOK_BEGIN);
-		statement();
-		while (type == TOK_SEMICOLON) {
-			expect(TOK_SEMICOLON);
-			statement();
-		}
-		expect(TOK_END);
-		break;
-	case TOK_IF:
-		expect(TOK_IF);
+	case TokenType::TOKEN_IF:
+		expect(TokenType::TOKEN_IF);
+        expect(TokenType::TOKEN_OPENPARANTHESIS);
 		condition();
-		expect(TOK_THEN);
-		statement();
+        expect(TokenType::TOKEN_CLOSEPARANTHESIS);
+		expect(TokenType::TOKEN_THEN);
+		expect(TokenType::TOKEN_BLOCKOPEN);
+		statements();
+		expect(TokenType::TOKEN_BLOCKCLOSE);
 		break;
 	case TOK_WHILE:
 		expect(TOK_WHILE);
