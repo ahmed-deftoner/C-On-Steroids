@@ -46,17 +46,16 @@ void parser::condition(){
 			break;
 		default:
 		    syntax_error();
-		}
-		expression();
+	}
+	expression();
 }
 
 void parser::factor(){
     switch (_lexer.peek(1).tokenType) {
+    case TokenType::TOKEN_IDENTIFIER:
 	case TokenType::TOKEN_VARIABLE:
 	case TokenType::TOKEN_NUMBER:
-        expect(TokenType::TOKEN_NUMBER);
-        cout<<"num\n";
-		//_lexer.getNextToken();
+		_lexer.getNextToken();
 		break;
 	case TokenType::TOKEN_OPENPARANTHESIS:
 		expect(TokenType::TOKEN_OPENPARANTHESIS);
@@ -191,32 +190,34 @@ void parser::block()
     }*/
     
     //statements-- > COLON LPAREN start RPAREN
-    while (_lexer.peek(1).tokenType == TokenType::TOKEN_IDENTIFIER)
-    {
-        expect(TokenType::TOKEN_IDENTIFIER);
-        expect(TokenType::TOKEN_COLON);
-        expect(TokenType::TOKEN_INT);
-        expect(TokenType::TOKEN_FUNCARROW);
-        expect(TokenType::TOKEN_FUNCTION);
-        expect(TokenType::TOKEN_OPENPARANTHESIS);
-        while (_lexer.peek(1).tokenType == TokenType::TOKEN_VARIABLE)
+    while (_lexer.peek(1).tokenType != TokenType::END_OF_FILE) {
+        while (_lexer.peek(1).tokenType == TokenType::TOKEN_IDENTIFIER)
         {
-            expect(TokenType::TOKEN_VARIABLE);
+            expect(TokenType::TOKEN_IDENTIFIER);
             expect(TokenType::TOKEN_COLON);
             expect(TokenType::TOKEN_INT);
-            while (_lexer.peek(1).tokenType == TokenType::TOKEN_COMMA)
+            expect(TokenType::TOKEN_FUNCARROW);
+            expect(TokenType::TOKEN_FUNCTION);
+            expect(TokenType::TOKEN_OPENPARANTHESIS);
+            while (_lexer.peek(1).tokenType == TokenType::TOKEN_VARIABLE)
             {
-                expect(TokenType::TOKEN_COMMA);
                 expect(TokenType::TOKEN_VARIABLE);
                 expect(TokenType::TOKEN_COLON);
                 expect(TokenType::TOKEN_INT);
+                while (_lexer.peek(1).tokenType == TokenType::TOKEN_COMMA)
+                {
+                    expect(TokenType::TOKEN_COMMA);
+                    expect(TokenType::TOKEN_VARIABLE);
+                    expect(TokenType::TOKEN_COLON);
+                    expect(TokenType::TOKEN_INT);
+                }
             }
+            expect(TokenType::TOKEN_CLOSEPARANTHESIS);
+            expect(TokenType::TOKEN_BLOCKOPEN);
+            cout<<"func\n";
+            block();
+            expect(TokenType::TOKEN_BLOCKCLOSE);
         }
-        expect(TokenType::TOKEN_CLOSEPARANTHESIS);
-        expect(TokenType::TOKEN_BLOCKOPEN);
-        cout<<"func\n";
-        block();
-        expect(TokenType::TOKEN_BLOCKCLOSE);
+        statements();
     }
-    statements();
 }
