@@ -82,6 +82,41 @@ void parser::expression() {
     }
 }
 
+void parser::statements() {
+    switch (_lexer.peek(1).tokenType) {
+	case TokenType::TOKEN_DISPLAYLINE:
+		expect(TokenType::TOKEN_DISPLAYLINE);
+		expect(TokenType::TOKEN_COLON);
+        expect(TokenType::TOKEN_STRING);
+        expect(TokenType::TOKEN_SEMICOLON);
+		break;
+	case to:
+		expect(TOK_CALL);
+		expect(TOK_IDENT);
+		break;
+	case TOK_BEGIN:
+		expect(TOK_BEGIN);
+		statement();
+		while (type == TOK_SEMICOLON) {
+			expect(TOK_SEMICOLON);
+			statement();
+		}
+		expect(TOK_END);
+		break;
+	case TOK_IF:
+		expect(TOK_IF);
+		condition();
+		expect(TOK_THEN);
+		statement();
+		break;
+	case TOK_WHILE:
+		expect(TOK_WHILE);
+		condition();
+		expect(TOK_DO);
+		statement();
+	}
+}
+
 //this function is for sample purposes only
 void parser::block()
 {
