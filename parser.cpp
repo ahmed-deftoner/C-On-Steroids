@@ -55,6 +55,7 @@ void parser::factor(){
     case TokenType::TOKEN_IDENTIFIER:
 	case TokenType::TOKEN_VARIABLE:
 	case TokenType::TOKEN_NUMBER:
+        cout<<"variable\n";
 		_lexer.getNextToken();
 		break;
 	case TokenType::TOKEN_OPENPARANTHESIS:
@@ -65,6 +66,7 @@ void parser::factor(){
 }
 
 void parser::term(){
+    cout<<"factor\n";
     factor();
     while (_lexer.peek(1).tokenType == TokenType::TOKEN_MULTIPLY || _lexer.peek(1).tokenType == TokenType::TOKEN_DIVIDE)
     {
@@ -78,6 +80,7 @@ void parser::expression() {
         cout<<"plus minus\n";
         _lexer.getNextToken();
     }
+    cout<<"term\n";
     term();
     while (_lexer.peek(1).tokenType == TokenType::TOKEN_PLUS || _lexer.peek(1).tokenType == TokenType::TOKEN_MINUS)
     {
@@ -97,20 +100,28 @@ void parser::statements() {
 		break;
     case TokenType::TOKEN_VARIABLE:
 		expect(TokenType::TOKEN_VARIABLE);
-        expect(TokenType::TOKEN_COLON);
-        expect(TokenType::TOKEN_INT);
         if (_lexer.peek(1).tokenType == TokenType::TOKEN_EQUALSIGN)
         {
             expect(TokenType::TOKEN_EQUALSIGN);
+            cout<<"equal\n";
             expression();
-        }
-        else if (_lexer.peek(1).tokenType == TokenType::TOKEN_COMMA) {
-            while (_lexer.peek(1).tokenType == TokenType::TOKEN_COMMA)
+        } else if (_lexer.peek(1).tokenType == TokenType::TOKEN_COLON) {
+            expect(TokenType::TOKEN_COLON);
+            expect(TokenType::TOKEN_INT);
+            if (_lexer.peek(1).tokenType == TokenType::TOKEN_EQUALSIGN)
             {
-                expect(TokenType::TOKEN_COMMA);
-                expect(TokenType::TOKEN_VARIABLE);
-                expect(TokenType::TOKEN_COLON);
-                expect(TokenType::TOKEN_INT);
+                expect(TokenType::TOKEN_EQUALSIGN);
+                cout<<"equal\n";
+                expression();
+            }
+            else if (_lexer.peek(1).tokenType == TokenType::TOKEN_COMMA) {
+                while (_lexer.peek(1).tokenType == TokenType::TOKEN_COMMA)
+                {
+                    expect(TokenType::TOKEN_COMMA);
+                    expect(TokenType::TOKEN_VARIABLE);
+                    expect(TokenType::TOKEN_COLON);
+                    expect(TokenType::TOKEN_INT);
+                }
             }
         }
         expect(TokenType::TOKEN_SEMICOLON);
