@@ -119,6 +119,11 @@ void parser::statements() {
 	case TokenType::TOKEN_DISPLAYLINE:
 		expect(TokenType::TOKEN_DISPLAYLINE);
 		expect(TokenType::TOKEN_COLON);
+        while (_lexer.peek(1).tokenType == TokenType::TOKEN_IDENTIFIER)
+        {
+            expect(TokenType::TOKEN_IDENTIFIER);
+            expect(TokenType::TOKEN_COMMA);
+        }
         expect(TokenType::TOKEN_STRING);
         expect(TokenType::TOKEN_SEMICOLON);
         cout<<"displayline\n";
@@ -126,6 +131,11 @@ void parser::statements() {
 	case TokenType::TOKEN_DISPLAY:
 		expect(TokenType::TOKEN_DISPLAY);
 		expect(TokenType::TOKEN_COLON);
+        while (_lexer.peek(1).tokenType == TokenType::TOKEN_IDENTIFIER)
+        {
+            expect(TokenType::TOKEN_IDENTIFIER);
+            expect(TokenType::TOKEN_COMMA);
+        }
         expect(TokenType::TOKEN_STRING);
         expect(TokenType::TOKEN_SEMICOLON);
         cout<<"display\n";
