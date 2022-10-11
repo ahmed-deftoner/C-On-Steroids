@@ -8,7 +8,7 @@ calculateFib: int <- function($n:int){
         displayline:'negative number entered';
         return:0;
     } else if (n -eq 0) then {
-        displayline:"it's 0 man!"
+        displayline:"it's 0 man!";
         return:0;
     } else {
         display:"\nThe fibonacci series: ";
@@ -28,6 +28,6 @@ calculateFib: int <- function($n:int){
 main: int <- function(){
     $num: int;
     "Enter the number" :read: $num; #~ input ~#
-    $result: int = execute calculateFib($num)
+    $result: int = execute calculateFib($num);
     return:0; #~halt~#
 }

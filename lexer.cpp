@@ -41,6 +41,7 @@ string reserved[] = {
 	"TOKEN_STRING",
    	"TOKEN_FUNCARROW",
     "ERROR"
+    "TOKEN_EXECUTE"
 	};
 
 token::token() {
@@ -127,11 +128,7 @@ namespace LexerUtils {
                     if (*it=='t') {
                         tokens.push_back(token("lt",TokenType::TOKEN_LESS));
                         *it++;
-                    }
-                }
-                else if (*it=='l'){
-                    it++;
-                    if (*it=='e') {
+                    }else if (*it=='e') {
                         tokens.push_back(token("le",TokenType::TOKEN_LESSEQUAL));
                         *it++;
                     }
@@ -141,11 +138,7 @@ namespace LexerUtils {
                     if (*it=='t') {
                         tokens.push_back(token("gt",TokenType::TOKEN_GREATER));
                         *it++;
-                    }
-                }
-               else if (*it=='g'){
-                    it++;
-                    if (*it=='e') {
+                    }else if (*it=='e') {
                         tokens.push_back(token("ge",TokenType::TOKEN_GREATEREQUAL));
                         *it++;
                     }
@@ -227,6 +220,8 @@ namespace LexerUtils {
                 tokens.push_back(token(identifier,TokenType::TOKEN_DISPLAYLINE));
             else if (identifier.compare("return")==0)
                 tokens.push_back(token(identifier,TokenType::TOKEN_RETURN));
+            else if (identifier.compare("execute")==0)
+                tokens.push_back(token(identifier,TokenType::TOKEN_EXECUTE));
             else 
                 tokens.push_back(token(identifier,TokenType::TOKEN_IDENTIFIER));
         }
@@ -307,12 +302,12 @@ void lexer::Tokenize() {
         // Special Characters
         LexerUtils::checkSpecialCharacters(it, tokens);
         // Output file
-        outputTokens(tokens);
         ++it;
     }
     
     //push_back EOF token at end to identify End of File
     tokens.push_back(token(string(""), TokenType::END_OF_FILE));
+    outputTokens(tokens);
 }
 
 lexer::lexer(const char filename[]) {
