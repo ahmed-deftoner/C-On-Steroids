@@ -1,4 +1,5 @@
 #include "parser.h"
+#include <unistd.h>
 
 void parser::syntax_error()
 {
@@ -55,7 +56,7 @@ void parser::factor(){
     case TokenType::TOKEN_IDENTIFIER:
 	case TokenType::TOKEN_VARIABLE:
 	case TokenType::TOKEN_NUMBER:
-        cout<<"variable\n";
+     //   cout<<"variable\n";
 		_lexer.getNextToken();
 		break;
 	case TokenType::TOKEN_OPENPARANTHESIS:
@@ -66,7 +67,7 @@ void parser::factor(){
 }
 
 void parser::term(){
-    cout<<"factor\n";
+   // cout<<"factor\n";
     factor();
     while (_lexer.peek(1).tokenType == TokenType::TOKEN_MULTIPLY || _lexer.peek(1).tokenType == TokenType::TOKEN_DIVIDE)
     {
@@ -77,10 +78,10 @@ void parser::term(){
 
 void parser::expression() {
     if (_lexer.peek(1).tokenType == TokenType::TOKEN_PLUS || _lexer.peek(1).tokenType == TokenType::TOKEN_MINUS) {
-        cout<<"plus minus\n";
+       // cout<<"plus minus\n";
         _lexer.getNextToken();
     }
-    cout<<"term\n";
+    //cout<<"term\n";
     term();
     while (_lexer.peek(1).tokenType == TokenType::TOKEN_PLUS || _lexer.peek(1).tokenType == TokenType::TOKEN_MINUS)
     {
@@ -230,6 +231,7 @@ void parser::block()
     while (_lexer.peek(1).tokenType != TokenType::END_OF_FILE) {
         while (_lexer.peek(1).tokenType == TokenType::TOKEN_IDENTIFIER)
         {
+            cout<<"in func\n";
             expect(TokenType::TOKEN_IDENTIFIER);
             expect(TokenType::TOKEN_COLON);
             expect(TokenType::TOKEN_INT);
@@ -256,5 +258,7 @@ void parser::block()
             expect(TokenType::TOKEN_BLOCKCLOSE);
         }
         statements();
+        cout << "func finish\n";
+        usleep(1000000);
     }
 }

@@ -47,7 +47,8 @@ enum class TokenType
 	TOKEN_EQUALSIGN = 34,
 	TOKEN_STRING = 35,
 	TOKEN_FUNCARROW = 36,
-	ERROR = 40
+	ERROR = 40,
+	TOKEN_EXECUTE = 41
 
 };
 //structure of a token 

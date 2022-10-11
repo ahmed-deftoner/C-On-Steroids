@@ -41,6 +41,7 @@ string reserved[] = {
 	"TOKEN_STRING",
    	"TOKEN_FUNCARROW",
     "ERROR"
+    "TOKEN_EXECUTE"
 	};
 
 token::token() {
@@ -219,6 +220,8 @@ namespace LexerUtils {
                 tokens.push_back(token(identifier,TokenType::TOKEN_DISPLAYLINE));
             else if (identifier.compare("return")==0)
                 tokens.push_back(token(identifier,TokenType::TOKEN_RETURN));
+            else if (identifier.compare("execute")==0)
+                tokens.push_back(token(identifier,TokenType::TOKEN_EXECUTE));
             else 
                 tokens.push_back(token(identifier,TokenType::TOKEN_IDENTIFIER));
         }
