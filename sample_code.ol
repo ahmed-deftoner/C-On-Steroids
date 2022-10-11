@@ -8,7 +8,7 @@ calculateFib: int <- function($n:int){
         displayline:'negative number entered';
         return:0;
     } else if (n -eq 0) then {
-        displayline:"it's 0 man!"
+        displayline:"it's 0 man!";
         return:0;
     } else {
         display:"\nThe fibonacci series: ";

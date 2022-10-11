@@ -127,11 +127,7 @@ namespace LexerUtils {
                     if (*it=='t') {
                         tokens.push_back(token("lt",TokenType::TOKEN_LESS));
                         *it++;
-                    }
-                }
-                else if (*it=='l'){
-                    it++;
-                    if (*it=='e') {
+                    }else if (*it=='e') {
                         tokens.push_back(token("le",TokenType::TOKEN_LESSEQUAL));
                         *it++;
                     }
@@ -141,11 +137,7 @@ namespace LexerUtils {
                     if (*it=='t') {
                         tokens.push_back(token("gt",TokenType::TOKEN_GREATER));
                         *it++;
-                    }
-                }
-               else if (*it=='g'){
-                    it++;
-                    if (*it=='e') {
+                    }else if (*it=='e') {
                         tokens.push_back(token("ge",TokenType::TOKEN_GREATEREQUAL));
                         *it++;
                     }

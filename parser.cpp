@@ -88,6 +88,13 @@ void parser::expression() {
 
 void parser::statements() {
     switch (_lexer.peek(1).tokenType) {
+    case TokenType::TOKEN_RETURN:
+        cout<<"return\n";
+		expect(TokenType::TOKEN_RETURN);
+		expect(TokenType::TOKEN_COLON);
+        expect(TokenType::TOKEN_NUMBER);
+        expect(TokenType::TOKEN_SEMICOLON);
+		break;
     case TokenType::TOKEN_VARIABLE:
 		expect(TokenType::TOKEN_VARIABLE);
         expect(TokenType::TOKEN_COLON);
@@ -123,13 +130,6 @@ void parser::statements() {
         expect(TokenType::TOKEN_SEMICOLON);
         cout<<"display\n";
 		break;
-    case TokenType::TOKEN_RETURN:
-		expect(TokenType::TOKEN_RETURN);
-		expect(TokenType::TOKEN_COLON);
-        expression();
-        expect(TokenType::TOKEN_SEMICOLON);
-        cout<<"return\n";
-		break;
 	case TokenType::TOKEN_IF:
 		expect(TokenType::TOKEN_IF);
         expect(TokenType::TOKEN_OPENPARANTHESIS);
@@ -138,7 +138,10 @@ void parser::statements() {
 		expect(TokenType::TOKEN_THEN);
 		expect(TokenType::TOKEN_BLOCKOPEN);
         cout<<"if\n";
-		statements();
+        while (_lexer.peek(1).tokenType != TokenType::TOKEN_BLOCKCLOSE)
+        {
+            statements();
+        }
 		expect(TokenType::TOKEN_BLOCKCLOSE);
 		break;
     case TokenType::TOKEN_ELSE:
@@ -153,7 +156,10 @@ void parser::statements() {
         }
         expect(TokenType::TOKEN_BLOCKOPEN);
         cout<<"else\n";
-		statements();
+		while (_lexer.peek(1).tokenType != TokenType::TOKEN_BLOCKCLOSE)
+        {
+            statements();
+        }
 		expect(TokenType::TOKEN_BLOCKCLOSE);
 		break;
 	case TokenType::TOKEN_DO:
@@ -164,7 +170,10 @@ void parser::statements() {
 		expect(TokenType::TOKEN_CLOSEPARANTHESIS);
 		expect(TokenType::TOKEN_BLOCKOPEN);
         cout<<"do\n";
-		statements();
+		while (_lexer.peek(1).tokenType != TokenType::TOKEN_BLOCKCLOSE)
+        {
+            statements();
+        }
 		expect(TokenType::TOKEN_BLOCKCLOSE);
         break;
 	}
