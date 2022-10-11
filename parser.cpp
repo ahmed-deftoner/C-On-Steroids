@@ -184,6 +184,23 @@ void parser::statements() {
         }
 		expect(TokenType::TOKEN_BLOCKCLOSE);
 		break;
+    case TokenType::TOKEN_EXECUTE:
+		expect(TokenType::TOKEN_EXECUTE);
+		expect(TokenType::TOKEN_IDENTIFIER);
+		expect(TokenType::TOKEN_OPENPARANTHESIS);
+        while (_lexer.peek(1).tokenType == TokenType::TOKEN_VARIABLE)
+        {
+		    expect(TokenType::TOKEN_VARIABLE);
+            while (_lexer.peek(1).tokenType == TokenType::TOKEN_COMMA)
+            {
+                expect(TokenType::TOKEN_COMMA);
+                expect(TokenType::TOKEN_VARIABLE);
+            }
+        }
+        
+        cout<<"exec\n";
+		expect(TokenType::TOKEN_CLOSEPARANTHESIS);
+		break;
     case TokenType::TOKEN_STRING:
 		expect(TokenType::TOKEN_STRING);
 		expect(TokenType::TOKEN_COLON);
