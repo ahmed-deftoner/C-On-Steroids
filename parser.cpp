@@ -229,7 +229,7 @@ void parser::block()
     
     //statements-- > COLON LPAREN start RPAREN
     while (_lexer.peek(1).tokenType != TokenType::END_OF_FILE) {
-        while (_lexer.peek(1).tokenType == TokenType::TOKEN_IDENTIFIER)
+        if (_lexer.peek(1).tokenType == TokenType::TOKEN_IDENTIFIER)
         {
             cout<<"in func\n";
             expect(TokenType::TOKEN_IDENTIFIER);
@@ -254,10 +254,13 @@ void parser::block()
             expect(TokenType::TOKEN_CLOSEPARANTHESIS);
             expect(TokenType::TOKEN_BLOCKOPEN);
             cout<<"func\n";
-            block();
+            while (_lexer.peek(1).tokenType != TokenType::TOKEN_BLOCKCLOSE)
+            {
+                statements();
+            }
+            
             expect(TokenType::TOKEN_BLOCKCLOSE);
         }
-        statements();
         cout << "func finish\n";
         usleep(1000000);
     }
