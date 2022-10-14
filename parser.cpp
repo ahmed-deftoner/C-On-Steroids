@@ -1,6 +1,10 @@
 #include "parser.h"
 #include <unistd.h>
 
+void Symbol::Symbol() {
+    this->id = "";
+    this->type = "";
+}
 void parser::syntax_error()
 {
     cout << "SYNTAX ERROR\n" <<_lexer.getCurrentPointer();
@@ -260,6 +264,15 @@ void parser::statements() {
 	}
 }
 
+void parser::outputSymbolTable() {
+    fstream fout;
+    fout.open("symbol_table.txt", ios::out);
+    for (auto x : symbol_table) {
+        fout << x.id << " " << x.type << endl;
+    }
+    fout.close();
+}
+
 //this function is for sample purposes only
 void parser::block()
 {
@@ -325,4 +338,5 @@ void parser::block()
         cout << "func finish\n";
         usleep(1000000);
     }
+    outputSymbolTable();
 }

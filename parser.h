@@ -29,6 +29,7 @@ public:
     void factor();
     void condition();
     void block();
+    void outputSymbolTable();
     /*Terminal functions goes here use peek and expect*/
     /*use TokenType:: for token names for example
         expect(TokenType::ASSIGN);   //example function call
