@@ -108,6 +108,7 @@ void parser::expression() {
 }
 
 void parser::statements() {
+    vector<string> vars;
     switch (_lexer.peek(1).tokenType) {
     case TokenType::TOKEN_RETURN:
         cout<<"return\n";
@@ -117,6 +118,7 @@ void parser::statements() {
         expect(TokenType::TOKEN_SEMICOLON);
 		break;
     case TokenType::TOKEN_VARIABLE:
+        vars.push_back(_lexer.peek(1).lexeme);
 		expect(TokenType::TOKEN_VARIABLE);
         if (_lexer.peek(1).tokenType == TokenType::TOKEN_EQUALSIGN)
         {
@@ -136,6 +138,7 @@ void parser::statements() {
                 while (_lexer.peek(1).tokenType == TokenType::TOKEN_COMMA)
                 {
                     expect(TokenType::TOKEN_COMMA);
+                    vars.push_back(_lexer.peek(1).lexeme);
                     expect(TokenType::TOKEN_VARIABLE);
                     expect(TokenType::TOKEN_COLON);
                     expect(TokenType::TOKEN_INT);
@@ -144,6 +147,10 @@ void parser::statements() {
         }
         expect(TokenType::TOKEN_SEMICOLON);
         cout<<"var\n";
+        for (auto x : vars)
+        {
+            symbol_table.push_back(Symbol(types[0],x));
+        }
 		break;
 	case TokenType::TOKEN_DISPLAYLINE:
 		expect(TokenType::TOKEN_DISPLAYLINE);
@@ -283,6 +290,7 @@ void parser::block()
     while (_lexer.peek(1).tokenType != TokenType::END_OF_FILE) {
         if (_lexer.peek(1).tokenType == TokenType::TOKEN_IDENTIFIER)
         {
+            string func = _lexer.peek(1).lexeme;
             cout<<"in func\n";
             expect(TokenType::TOKEN_IDENTIFIER);
             expect(TokenType::TOKEN_COLON);
@@ -312,6 +320,7 @@ void parser::block()
             }
             
             expect(TokenType::TOKEN_BLOCKCLOSE);
+            symbol_table.push_back(Symbol(types[1],func));
         }
         cout << "func finish\n";
         usleep(1000000);
