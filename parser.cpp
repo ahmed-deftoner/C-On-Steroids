@@ -341,7 +341,10 @@ void parser::block()
             }
             
             expect(TokenType::TOKEN_BLOCKCLOSE);
-            symbol_table.push_back(Symbol(types[1],func));
+            if (find(symbol_table.begin(), symbol_table.end(), func) != symbol_table.end())
+            {
+                symbol_table.push_back(Symbol(types[1],func));
+            }
             for (auto x: args)
             {
                 symbol_table.push_back(Symbol(types[0],x));         
