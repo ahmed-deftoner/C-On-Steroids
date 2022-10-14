@@ -1,9 +1,14 @@
 #include "parser.h"
 #include <unistd.h>
 
-void Symbol::Symbol() {
+Symbol::Symbol() {
     this->id = "";
     this->type = "";
+}
+
+Symbol::Symbol(string type, string id) {
+    this->id = id;
+    this->type = type;
 }
 void parser::syntax_error()
 {
@@ -303,6 +308,7 @@ void parser::block()
     while (_lexer.peek(1).tokenType != TokenType::END_OF_FILE) {
         if (_lexer.peek(1).tokenType == TokenType::TOKEN_IDENTIFIER)
         {
+            vector<string> args;
             string func = _lexer.peek(1).lexeme;
             cout<<"in func\n";
             expect(TokenType::TOKEN_IDENTIFIER);
@@ -313,12 +319,14 @@ void parser::block()
             expect(TokenType::TOKEN_OPENPARANTHESIS);
             while (_lexer.peek(1).tokenType == TokenType::TOKEN_VARIABLE)
             {
+                args.push_back(_lexer.peek(1).lexeme);
                 expect(TokenType::TOKEN_VARIABLE);
                 expect(TokenType::TOKEN_COLON);
                 expect(TokenType::TOKEN_INT);
                 while (_lexer.peek(1).tokenType == TokenType::TOKEN_COMMA)
                 {
                     expect(TokenType::TOKEN_COMMA);
+                    args.push_back(_lexer.peek(1).lexeme);
                     expect(TokenType::TOKEN_VARIABLE);
                     expect(TokenType::TOKEN_COLON);
                     expect(TokenType::TOKEN_INT);
@@ -334,6 +342,11 @@ void parser::block()
             
             expect(TokenType::TOKEN_BLOCKCLOSE);
             symbol_table.push_back(Symbol(types[1],func));
+            for (auto x: args)
+            {
+                symbol_table.push_back(Symbol(types[0],x));         
+            }
+            
         }
         cout << "func finish\n";
         usleep(1000000);

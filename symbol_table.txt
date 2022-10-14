@@ -1,0 +1,13 @@
+x variable
+y variable
+z variable
+i variable
+z variable
+x variable
+y variable
+i variable
+calculateFib function
+n variable
+num variable
+result variable
+main function
