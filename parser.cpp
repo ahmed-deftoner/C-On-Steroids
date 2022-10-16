@@ -197,6 +197,11 @@ void parser::statements() {
         while (_lexer.peek(1).tokenType != TokenType::TOKEN_BLOCKCLOSE)
         {
             statements();
+            if (_lexer.peek(1).tokenType != TokenType::END_OF_FILE)
+            {
+                syntax_error();
+            }
+            
         }
 		expect(TokenType::TOKEN_BLOCKCLOSE);
 		break;
@@ -215,6 +220,10 @@ void parser::statements() {
 		while (_lexer.peek(1).tokenType != TokenType::TOKEN_BLOCKCLOSE)
         {
             statements();
+            if (_lexer.peek(1).tokenType != TokenType::END_OF_FILE)
+            {
+                syntax_error();
+            }
         }
 		expect(TokenType::TOKEN_BLOCKCLOSE);
 		break;
@@ -265,8 +274,15 @@ void parser::statements() {
 		while (_lexer.peek(1).tokenType != TokenType::TOKEN_BLOCKCLOSE)
         {
             statements();
+            if (_lexer.peek(1).tokenType != TokenType::END_OF_FILE)
+            {
+                syntax_error();
+            }
         }
 		expect(TokenType::TOKEN_BLOCKCLOSE);
+        break;
+    default:
+        syntax_error();
         break;
 	}
 }
@@ -340,6 +356,11 @@ void parser::block()
             while (_lexer.peek(1).tokenType != TokenType::TOKEN_BLOCKCLOSE)
             {
                 statements();
+                if (_lexer.peek(1).tokenType == TokenType::END_OF_FILE)
+                {
+                    syntax_error();
+                }
+                
             }
             
             expect(TokenType::TOKEN_BLOCKCLOSE);
