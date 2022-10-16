@@ -2,7 +2,7 @@
 #define _PARSER_H_
 #include "lexer.h"
 
-string types[2] = {"variable", "function"} ;
+string types[2] = {"int", "char"} ;
 
 struct Symbol
 {
