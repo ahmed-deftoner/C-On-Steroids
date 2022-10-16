@@ -1,0 +1,8 @@
+x int
+y int
+z int
+i int
+n int
+c int
+num int
+result int
