@@ -1,13 +1,13 @@
-calculateFib: int <- function($n:int){
-	#~variable declarations, note z is not initialized~#
+calculateFib: int <- function($n: int, $c: int){
+    #~variable declarations, note z is not initialized~#
     $x:int = 0;
     $y:int = 0;
     $z:int;
 
-    if (n -lt 0) then {
+    if ($n -lt 0) then {
         displayline:'negative number entered';
         return:0;
-    } else if (n -eq 0) then {
+    } else if ($n -eq 0) then {
         displayline:"it's 0 man!";
         return:0;
     } else {
@@ -28,6 +28,6 @@ calculateFib: int <- function($n:int){
 main: int <- function(){
     $num: int;
     "Enter the number" :read: $num; #~ input ~#
-    $result: int = execute calculateFib($num);
+    $result: int = execute: calculateFib($num);
     return:0; #~halt~#
 }

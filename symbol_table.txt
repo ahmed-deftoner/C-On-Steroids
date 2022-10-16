@@ -6,8 +6,7 @@ z variable
 x variable
 y variable
 i variable
-calculateFib function
 n variable
+c variable
 num variable
 result variable
-main function

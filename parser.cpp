@@ -70,6 +70,7 @@ void parser::factor(){
 		break;
     case TokenType::TOKEN_EXECUTE:
 		expect(TokenType::TOKEN_EXECUTE);
+		expect(TokenType::TOKEN_COLON);
 		expect(TokenType::TOKEN_IDENTIFIER);
 		expect(TokenType::TOKEN_OPENPARANTHESIS);
         while (_lexer.peek(1).tokenType == TokenType::TOKEN_VARIABLE)
@@ -219,6 +220,7 @@ void parser::statements() {
 		break;
     case TokenType::TOKEN_EXECUTE:
 		expect(TokenType::TOKEN_EXECUTE);
+		expect(TokenType::TOKEN_COLON);
 		expect(TokenType::TOKEN_IDENTIFIER);
 		expect(TokenType::TOKEN_OPENPARANTHESIS);
         while (_lexer.peek(1).tokenType == TokenType::TOKEN_VARIABLE)
@@ -341,10 +343,6 @@ void parser::block()
             }
             
             expect(TokenType::TOKEN_BLOCKCLOSE);
-            if (find(symbol_table.begin(), symbol_table.end(), func) != symbol_table.end())
-            {
-                symbol_table.push_back(Symbol(types[1],func));
-            }
             for (auto x: args)
             {
                 symbol_table.push_back(Symbol(types[0],x));         
