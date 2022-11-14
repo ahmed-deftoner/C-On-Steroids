@@ -181,8 +181,10 @@ void parser::statements() {
             expect(TokenType::TOKEN_VARIABLE);
             expect(TokenType::TOKEN_COMMA);
         }
+        temp = _lexer.peek(1).lexeme;
         expect(TokenType::TOKEN_STRING);
         expect(TokenType::TOKEN_SEMICOLON);
+        tac.push_back("out \"" + temp + "\";");
 		break;
 	case TokenType::TOKEN_IF:
 		expect(TokenType::TOKEN_IF);
