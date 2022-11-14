@@ -17,6 +17,11 @@ class parser
 {
     lexer _lexer;
     vector<Symbol> symbol_table;
+    vector<string> tac;
+    fstream tacFile;
+    string tempExpr = "";
+    bool init;
+
 public:
     void syntax_error();
     token expect(TokenType expected_type);
@@ -30,6 +35,7 @@ public:
     void condition();
     void block();
     void outputSymbolTable();
+    void outputTAC();
     /*Terminal functions goes here use peek and expect*/
     /*use TokenType:: for token names for example
         expect(TokenType::ASSIGN);   //example function call

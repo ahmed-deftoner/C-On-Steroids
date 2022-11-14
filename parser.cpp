@@ -27,7 +27,10 @@ token parser::expect(TokenType expected_type)
 parser::parser(const char filename[])
 {
     _lexer = lexer(filename);
+    tacFile.open("source_code.tac", ios::out);
+    init = false;
 }
+
 void parser::readAndPrintAllInput() //read and print allinputs (provided)
 {
     token t;
@@ -65,6 +68,8 @@ void parser::factor(){
     case TokenType::TOKEN_IDENTIFIER:
 	case TokenType::TOKEN_VARIABLE:
 	case TokenType::TOKEN_NUMBER:
+        if (init == true)
+            tempExpr = tempExpr + _lexer.peek(1).lexeme;
 		_lexer.getNextToken();
 		break;
     case TokenType::TOKEN_EXECUTE:
@@ -96,6 +101,8 @@ void parser::term(){
     factor();
     while (_lexer.peek(1).tokenType == TokenType::TOKEN_MULTIPLY || _lexer.peek(1).tokenType == TokenType::TOKEN_DIVIDE)
     {
+        if (init == true)
+            tempExpr = tempExpr + _lexer.peek(1).lexeme;
         _lexer.getNextToken();
         factor();
     }
@@ -110,6 +117,8 @@ void parser::expression() {
     term();
     while (_lexer.peek(1).tokenType == TokenType::TOKEN_PLUS || _lexer.peek(1).tokenType == TokenType::TOKEN_MINUS)
     {
+        if (init == true)
+            tempExpr = tempExpr + _lexer.peek(1).lexeme;
         _lexer.getNextToken();
         term();
     }
@@ -131,7 +140,11 @@ void parser::statements() {
         if (_lexer.peek(1).tokenType == TokenType::TOKEN_EQUALSIGN)
         {
             expect(TokenType::TOKEN_EQUALSIGN);
+            init = true;
             expression();
+            tac.push_back(temp + " = " + tempExpr + ";");
+            tempExpr = "";
+            init = false;
         } else if (_lexer.peek(1).tokenType == TokenType::TOKEN_COLON) {
             expect(TokenType::TOKEN_COLON);
             expect(TokenType::TOKEN_INT);
@@ -139,7 +152,12 @@ void parser::statements() {
             if (_lexer.peek(1).tokenType == TokenType::TOKEN_EQUALSIGN)
             {
                 expect(TokenType::TOKEN_EQUALSIGN);
+                init = true;
                 expression();
+                cout << tempExpr << endl;
+                tac.push_back(temp + " = " + tempExpr + ";");
+                tempExpr = "";
+                init = false;
             }
             else if (_lexer.peek(1).tokenType == TokenType::TOKEN_COMMA) {
                 while (_lexer.peek(1).tokenType == TokenType::TOKEN_COMMA)
@@ -161,24 +179,32 @@ void parser::statements() {
 	case TokenType::TOKEN_DISPLAYLINE:
 		expect(TokenType::TOKEN_DISPLAYLINE);
 		expect(TokenType::TOKEN_COLON);
-        while (_lexer.peek(1).tokenType == TokenType::TOKEN_IDENTIFIER)
+        while (_lexer.peek(1).tokenType == TokenType::TOKEN_VARIABLE)
         {
-            expect(TokenType::TOKEN_IDENTIFIER);
+            temp = _lexer.peek(1).lexeme;
+            expect(TokenType::TOKEN_VARIABLE);
             expect(TokenType::TOKEN_COMMA);
+            tac.push_back("out " + temp + ";");
         }
+        temp = _lexer.peek(1).lexeme;
         expect(TokenType::TOKEN_STRING);
         expect(TokenType::TOKEN_SEMICOLON);
+        tac.push_back("out \"" + temp + "\\n\";");
 		break;
 	case TokenType::TOKEN_DISPLAY:
 		expect(TokenType::TOKEN_DISPLAY);
 		expect(TokenType::TOKEN_COLON);
-        while (_lexer.peek(1).tokenType == TokenType::TOKEN_IDENTIFIER)
+        while (_lexer.peek(1).tokenType == TokenType::TOKEN_VARIABLE)
         {
-            expect(TokenType::TOKEN_IDENTIFIER);
+            temp = _lexer.peek(1).lexeme;
+            expect(TokenType::TOKEN_VARIABLE);
             expect(TokenType::TOKEN_COMMA);
+            tac.push_back("out " + temp + ";");
         }
+        temp = _lexer.peek(1).lexeme;
         expect(TokenType::TOKEN_STRING);
         expect(TokenType::TOKEN_SEMICOLON);
+        tac.push_back("out \"" + temp + "\";");
 		break;
 	case TokenType::TOKEN_IF:
 		expect(TokenType::TOKEN_IF);
@@ -197,27 +223,29 @@ void parser::statements() {
             
         }
 		expect(TokenType::TOKEN_BLOCKCLOSE);
-		break;
-    case TokenType::TOKEN_ELSE:
-		expect(TokenType::TOKEN_ELSE);
-        if (_lexer.peek(1).tokenType == TokenType::TOKEN_IF)
+        while (_lexer.peek(1).tokenType == TokenType::TOKEN_ELSE)
         {
-            expect(TokenType::TOKEN_IF);
-            expect(TokenType::TOKEN_OPENPARANTHESIS);
-            condition();
-            expect(TokenType::TOKEN_CLOSEPARANTHESIS);
-            expect(TokenType::TOKEN_THEN);
-        }
-        expect(TokenType::TOKEN_BLOCKOPEN);
-		while (_lexer.peek(1).tokenType != TokenType::TOKEN_BLOCKCLOSE)
-        {
-            statements();
-            if (_lexer.peek(1).tokenType == TokenType::END_OF_FILE)
+            expect(TokenType::TOKEN_ELSE);
+            if (_lexer.peek(1).tokenType == TokenType::TOKEN_IF)
             {
-                syntax_error();
+                expect(TokenType::TOKEN_IF);
+                expect(TokenType::TOKEN_OPENPARANTHESIS);
+                condition();
+                expect(TokenType::TOKEN_CLOSEPARANTHESIS);
+                expect(TokenType::TOKEN_THEN);
             }
+            expect(TokenType::TOKEN_BLOCKOPEN);
+            while (_lexer.peek(1).tokenType != TokenType::TOKEN_BLOCKCLOSE)
+            {
+                statements();
+                if (_lexer.peek(1).tokenType == TokenType::END_OF_FILE)
+                {
+                    syntax_error();
+                }
+            }
+            expect(TokenType::TOKEN_BLOCKCLOSE);
         }
-		expect(TokenType::TOKEN_BLOCKCLOSE);
+        
 		break;
     case TokenType::TOKEN_EXECUTE:
 		expect(TokenType::TOKEN_EXECUTE);
@@ -236,7 +264,9 @@ void parser::statements() {
 		expect(TokenType::TOKEN_CLOSEPARANTHESIS);
 		break;
     case TokenType::TOKEN_STRING:
+        temp = _lexer.peek(1).lexeme;
 		expect(TokenType::TOKEN_STRING);
+        tac.push_back("out \"" + temp + "\";");
 		expect(TokenType::TOKEN_COLON);
 		expect(TokenType::TOKEN_READ);
 		expect(TokenType::TOKEN_COLON);
@@ -249,8 +279,10 @@ void parser::statements() {
                 expect(TokenType::TOKEN_VARIABLE);
             }
         }*/
+        temp = _lexer.peek(1).lexeme;
         expect(TokenType::TOKEN_VARIABLE);
 		expect(TokenType::TOKEN_SEMICOLON);
+        tac.push_back("in " + temp + ";");
 		break;
 	case TokenType::TOKEN_DO:
 		expect(TokenType::TOKEN_DO);
@@ -284,31 +316,17 @@ void parser::outputSymbolTable() {
     fout.close();
 }
 
+void parser::outputTAC() {
+    cout<<"hehe\n";
+    for (auto x : tac) {
+        tacFile << x << endl;
+    }
+    tacFile.close();
+}
+
 //this function is for sample purposes only
 void parser::block()
 {
-    /*
-    if (_lexer.peek(1).tokenType == TokenType::TOKEN_VARIABLE)
-    {
-        expect(TokenType::TOKEN_VARIABLE);
-        expect(TokenType::TOKEN_COLON);
-        expect(TokenType::TOKEN_INT);
-        if (_lexer.peek(1).tokenType == TokenType::TOKEN_EQUALSIGN)
-        {
-            expect(TokenType::TOKEN_EQUALSIGN);
-            expression();
-        }
-        else if (_lexer.peek(1).tokenType == TokenType::TOKEN_COMMA) {
-            while (_lexer.peek(1).tokenType == TokenType::TOKEN_COMMA)
-            {
-                expect(TokenType::TOKEN_COMMA);
-                expect(TokenType::TOKEN_VARIABLE);
-                expect(TokenType::TOKEN_COLON);
-                expect(TokenType::TOKEN_INT);
-            }
-        }
-        expect(TokenType::TOKEN_SEMICOLON);
-    }*/
     
     //statements-- > COLON LPAREN start RPAREN
     while (_lexer.peek(1).tokenType != TokenType::END_OF_FILE) {
@@ -358,5 +376,6 @@ void parser::block()
         }
         //usleep(1000000);
     }
+    outputTAC();
     outputSymbolTable();
 }
