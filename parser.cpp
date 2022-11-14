@@ -248,7 +248,9 @@ void parser::statements() {
 		expect(TokenType::TOKEN_CLOSEPARANTHESIS);
 		break;
     case TokenType::TOKEN_STRING:
+        temp = _lexer.peek(1).lexeme;
 		expect(TokenType::TOKEN_STRING);
+        tac.push_back("out \"" + temp + "\";");
 		expect(TokenType::TOKEN_COLON);
 		expect(TokenType::TOKEN_READ);
 		expect(TokenType::TOKEN_COLON);
@@ -261,8 +263,10 @@ void parser::statements() {
                 expect(TokenType::TOKEN_VARIABLE);
             }
         }*/
+        temp = _lexer.peek(1).lexeme;
         expect(TokenType::TOKEN_VARIABLE);
 		expect(TokenType::TOKEN_SEMICOLON);
+        tac.push_back("in " + temp + ";");
 		break;
 	case TokenType::TOKEN_DO:
 		expect(TokenType::TOKEN_DO);
