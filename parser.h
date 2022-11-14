@@ -19,7 +19,7 @@ class parser
     vector<Symbol> symbol_table;
     vector<string> tac;
     fstream tacFile;
-    
+
 public:
     void syntax_error();
     token expect(TokenType expected_type);
@@ -27,7 +27,7 @@ public:
     void readAndPrintAllInput();
     void resetPointer();
     void statements();
-    void expression();
+    void expression(bool init);
     void term();
     void factor();
     void condition();

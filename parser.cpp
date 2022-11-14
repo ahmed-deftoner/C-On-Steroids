@@ -46,7 +46,7 @@ void parser::resetPointer()
 }
 
 void parser::condition(){
-    expression();
+    expression(false);
 	switch (_lexer.peek(1).tokenType) {
 		case TokenType::TOKEN_EQUAL:
 		case TokenType::TOKEN_LESS:
@@ -59,7 +59,7 @@ void parser::condition(){
 		default:
 		    syntax_error();
 	}
-	expression();
+	expression(false);
 }
 
 void parser::factor(){
@@ -88,7 +88,7 @@ void parser::factor(){
 		break;
 	case TokenType::TOKEN_OPENPARANTHESIS:
 		expect(TokenType::TOKEN_OPENPARANTHESIS);
-		expression();
+		expression(false);
 		expect(TokenType::TOKEN_CLOSEPARANTHESIS);
 	}
 }
@@ -103,7 +103,7 @@ void parser::term(){
     }
 }
 
-void parser::expression() {
+void parser::expression(bool init) {
     if (_lexer.peek(1).tokenType == TokenType::TOKEN_PLUS || _lexer.peek(1).tokenType == TokenType::TOKEN_MINUS) {
        // cout<<"plus minus\n";
         _lexer.getNextToken();
@@ -133,7 +133,7 @@ void parser::statements() {
         if (_lexer.peek(1).tokenType == TokenType::TOKEN_EQUALSIGN)
         {
             expect(TokenType::TOKEN_EQUALSIGN);
-            expression();
+            expression(false);
         } else if (_lexer.peek(1).tokenType == TokenType::TOKEN_COLON) {
             expect(TokenType::TOKEN_COLON);
             expect(TokenType::TOKEN_INT);
@@ -141,7 +141,7 @@ void parser::statements() {
             if (_lexer.peek(1).tokenType == TokenType::TOKEN_EQUALSIGN)
             {
                 expect(TokenType::TOKEN_EQUALSIGN);
-                expression();
+                expression(false);
             }
             else if (_lexer.peek(1).tokenType == TokenType::TOKEN_COMMA) {
                 while (_lexer.peek(1).tokenType == TokenType::TOKEN_COMMA)
