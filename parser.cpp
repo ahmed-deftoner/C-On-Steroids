@@ -197,10 +197,10 @@ void parser::statements() {
             
         }
 		expect(TokenType::TOKEN_BLOCKCLOSE);
-        if (_lexer.peek(1).tokenType == TokenType::TOKEN_ELSE)
+        while (_lexer.peek(1).tokenType == TokenType::TOKEN_ELSE)
         {
             expect(TokenType::TOKEN_ELSE);
-            while (_lexer.peek(1).tokenType == TokenType::TOKEN_IF)
+            if (_lexer.peek(1).tokenType == TokenType::TOKEN_IF)
             {
                 expect(TokenType::TOKEN_IF);
                 expect(TokenType::TOKEN_OPENPARANTHESIS);
