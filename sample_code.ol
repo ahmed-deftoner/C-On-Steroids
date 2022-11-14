@@ -1,8 +1,9 @@
-calculateFib: int <- function($n: int, $c: int){
+calculateFib: int <- function($n: int, $c: int, $c:int){
     #~variable declarations, note z is not initialized~#
     $x:int = 0;
     $y:int = 0;
     $z:int;
+
 
     if ($n -lt 0) then {
         displayline:'negative number entered';
@@ -14,8 +15,8 @@ calculateFib: int <- function($n: int, $c: int){
         display:"\nThe fibonacci series: ";
         $i:int = 1;
         do until($i-1 -ge $n){
-            display:x," ";
-            $z = $x + $y;
+            display:$x," ";
+            $z = $x + $y ;
             $x = $y;
             $y = $z;
             $i = $i + 1;

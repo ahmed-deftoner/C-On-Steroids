@@ -4,5 +4,6 @@ z int
 i int
 n int
 c int
+c int
 num int
 result int

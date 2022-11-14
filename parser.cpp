@@ -161,9 +161,9 @@ void parser::statements() {
 	case TokenType::TOKEN_DISPLAYLINE:
 		expect(TokenType::TOKEN_DISPLAYLINE);
 		expect(TokenType::TOKEN_COLON);
-        while (_lexer.peek(1).tokenType == TokenType::TOKEN_IDENTIFIER)
+        while (_lexer.peek(1).tokenType == TokenType::TOKEN_VARIABLE)
         {
-            expect(TokenType::TOKEN_IDENTIFIER);
+            expect(TokenType::TOKEN_VARIABLE);
             expect(TokenType::TOKEN_COMMA);
         }
         expect(TokenType::TOKEN_STRING);
@@ -172,9 +172,9 @@ void parser::statements() {
 	case TokenType::TOKEN_DISPLAY:
 		expect(TokenType::TOKEN_DISPLAY);
 		expect(TokenType::TOKEN_COLON);
-        while (_lexer.peek(1).tokenType == TokenType::TOKEN_IDENTIFIER)
+        while (_lexer.peek(1).tokenType == TokenType::TOKEN_VARIABLE)
         {
-            expect(TokenType::TOKEN_IDENTIFIER);
+            expect(TokenType::TOKEN_VARIABLE);
             expect(TokenType::TOKEN_COMMA);
         }
         expect(TokenType::TOKEN_STRING);
@@ -197,27 +197,29 @@ void parser::statements() {
             
         }
 		expect(TokenType::TOKEN_BLOCKCLOSE);
-		break;
-    case TokenType::TOKEN_ELSE:
-		expect(TokenType::TOKEN_ELSE);
-        if (_lexer.peek(1).tokenType == TokenType::TOKEN_IF)
+        if (_lexer.peek(1).tokenType == TokenType::TOKEN_ELSE)
         {
-            expect(TokenType::TOKEN_IF);
-            expect(TokenType::TOKEN_OPENPARANTHESIS);
-            condition();
-            expect(TokenType::TOKEN_CLOSEPARANTHESIS);
-            expect(TokenType::TOKEN_THEN);
-        }
-        expect(TokenType::TOKEN_BLOCKOPEN);
-		while (_lexer.peek(1).tokenType != TokenType::TOKEN_BLOCKCLOSE)
-        {
-            statements();
-            if (_lexer.peek(1).tokenType == TokenType::END_OF_FILE)
+            expect(TokenType::TOKEN_ELSE);
+            while (_lexer.peek(1).tokenType == TokenType::TOKEN_IF)
             {
-                syntax_error();
+                expect(TokenType::TOKEN_IF);
+                expect(TokenType::TOKEN_OPENPARANTHESIS);
+                condition();
+                expect(TokenType::TOKEN_CLOSEPARANTHESIS);
+                expect(TokenType::TOKEN_THEN);
             }
+            expect(TokenType::TOKEN_BLOCKOPEN);
+            while (_lexer.peek(1).tokenType != TokenType::TOKEN_BLOCKCLOSE)
+            {
+                statements();
+                if (_lexer.peek(1).tokenType == TokenType::END_OF_FILE)
+                {
+                    syntax_error();
+                }
+            }
+            expect(TokenType::TOKEN_BLOCKCLOSE);
         }
-		expect(TokenType::TOKEN_BLOCKCLOSE);
+        
 		break;
     case TokenType::TOKEN_EXECUTE:
 		expect(TokenType::TOKEN_EXECUTE);
