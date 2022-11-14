@@ -28,6 +28,7 @@ parser::parser(const char filename[])
 {
     _lexer = lexer(filename);
     tacFile.open("source_code.tac", ios::out);
+    init = false;
 }
 
 void parser::readAndPrintAllInput() //read and print allinputs (provided)
@@ -139,9 +140,11 @@ void parser::statements() {
         if (_lexer.peek(1).tokenType == TokenType::TOKEN_EQUALSIGN)
         {
             expect(TokenType::TOKEN_EQUALSIGN);
+            init = true;
             expression();
             tac.push_back(temp + " = " + tempExpr + ";");
             tempExpr = "";
+            init = false;
         } else if (_lexer.peek(1).tokenType == TokenType::TOKEN_COLON) {
             expect(TokenType::TOKEN_COLON);
             expect(TokenType::TOKEN_INT);
@@ -149,10 +152,12 @@ void parser::statements() {
             if (_lexer.peek(1).tokenType == TokenType::TOKEN_EQUALSIGN)
             {
                 expect(TokenType::TOKEN_EQUALSIGN);
+                init = true;
                 expression();
                 cout << tempExpr << endl;
                 tac.push_back(temp + " = " + tempExpr + ";");
                 tempExpr = "";
+                init = false;
             }
             else if (_lexer.peek(1).tokenType == TokenType::TOKEN_COMMA) {
                 while (_lexer.peek(1).tokenType == TokenType::TOKEN_COMMA)
