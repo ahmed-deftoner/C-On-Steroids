@@ -168,8 +168,10 @@ void parser::statements() {
             expect(TokenType::TOKEN_VARIABLE);
             expect(TokenType::TOKEN_COMMA);
         }
+        temp = _lexer.peek(1).lexeme;
         expect(TokenType::TOKEN_STRING);
         expect(TokenType::TOKEN_SEMICOLON);
+        tac.push_back("out \"" + temp + "\n\";");
 		break;
 	case TokenType::TOKEN_DISPLAY:
 		expect(TokenType::TOKEN_DISPLAY);
@@ -291,28 +293,6 @@ void parser::outputSymbolTable() {
 //this function is for sample purposes only
 void parser::block()
 {
-    /*
-    if (_lexer.peek(1).tokenType == TokenType::TOKEN_VARIABLE)
-    {
-        expect(TokenType::TOKEN_VARIABLE);
-        expect(TokenType::TOKEN_COLON);
-        expect(TokenType::TOKEN_INT);
-        if (_lexer.peek(1).tokenType == TokenType::TOKEN_EQUALSIGN)
-        {
-            expect(TokenType::TOKEN_EQUALSIGN);
-            expression();
-        }
-        else if (_lexer.peek(1).tokenType == TokenType::TOKEN_COMMA) {
-            while (_lexer.peek(1).tokenType == TokenType::TOKEN_COMMA)
-            {
-                expect(TokenType::TOKEN_COMMA);
-                expect(TokenType::TOKEN_VARIABLE);
-                expect(TokenType::TOKEN_COLON);
-                expect(TokenType::TOKEN_INT);
-            }
-        }
-        expect(TokenType::TOKEN_SEMICOLON);
-    }*/
     
     //statements-- > COLON LPAREN start RPAREN
     while (_lexer.peek(1).tokenType != TokenType::END_OF_FILE) {
