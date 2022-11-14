@@ -19,6 +19,7 @@ class parser
     vector<Symbol> symbol_table;
     vector<string> tac;
     fstream tacFile;
+    string tempExpr = "";
 
 public:
     void syntax_error();

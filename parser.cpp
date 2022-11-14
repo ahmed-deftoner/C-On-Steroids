@@ -67,6 +67,7 @@ void parser::factor(){
     case TokenType::TOKEN_IDENTIFIER:
 	case TokenType::TOKEN_VARIABLE:
 	case TokenType::TOKEN_NUMBER:
+        tempExpr = tempExpr + _lexer.peek(1).lexeme;
 		_lexer.getNextToken();
 		break;
     case TokenType::TOKEN_EXECUTE:
@@ -98,6 +99,7 @@ void parser::term(){
     factor();
     while (_lexer.peek(1).tokenType == TokenType::TOKEN_MULTIPLY || _lexer.peek(1).tokenType == TokenType::TOKEN_DIVIDE)
     {
+        tempExpr = tempExpr + _lexer.peek(1).lexeme;
         _lexer.getNextToken();
         factor();
     }
@@ -112,6 +114,7 @@ void parser::expression(bool init) {
     term();
     while (_lexer.peek(1).tokenType == TokenType::TOKEN_PLUS || _lexer.peek(1).tokenType == TokenType::TOKEN_MINUS)
     {
+        tempExpr = tempExpr + _lexer.peek(1).lexeme;
         _lexer.getNextToken();
         term();
     }
@@ -142,6 +145,8 @@ void parser::statements() {
             {
                 expect(TokenType::TOKEN_EQUALSIGN);
                 expression(false);
+                tac.push_back(temp + " = " + tempExpr);
+                tempExpr = "";
             }
             else if (_lexer.peek(1).tokenType == TokenType::TOKEN_COMMA) {
                 while (_lexer.peek(1).tokenType == TokenType::TOKEN_COMMA)
