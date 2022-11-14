@@ -17,6 +17,9 @@ class parser
 {
     lexer _lexer;
     vector<Symbol> symbol_table;
+    vector<string> tac;
+    fstream tacFile;
+    
 public:
     void syntax_error();
     token expect(TokenType expected_type);

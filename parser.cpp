@@ -27,7 +27,9 @@ token parser::expect(TokenType expected_type)
 parser::parser(const char filename[])
 {
     _lexer = lexer(filename);
+    tacFile.open("source_code.tac", ios::out);
 }
+
 void parser::readAndPrintAllInput() //read and print allinputs (provided)
 {
     token t;
