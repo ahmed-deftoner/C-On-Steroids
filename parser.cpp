@@ -171,7 +171,7 @@ void parser::statements() {
         temp = _lexer.peek(1).lexeme;
         expect(TokenType::TOKEN_STRING);
         expect(TokenType::TOKEN_SEMICOLON);
-        tac.push_back("out \"" + temp + "\n\";");
+        tac.push_back("out \"" + temp + "\\n\";");
 		break;
 	case TokenType::TOKEN_DISPLAY:
 		expect(TokenType::TOKEN_DISPLAY);
@@ -292,6 +292,14 @@ void parser::outputSymbolTable() {
     fout.close();
 }
 
+void parser::outputTAC() {
+    cout<<"hehe\n";
+    for (auto x : tac) {
+        tacFile << x << endl;
+    }
+    tacFile.close();
+}
+
 //this function is for sample purposes only
 void parser::block()
 {
@@ -344,5 +352,6 @@ void parser::block()
         }
         //usleep(1000000);
     }
+    outputTAC();
     outputSymbolTable();
 }

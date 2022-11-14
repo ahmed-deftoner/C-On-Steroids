@@ -33,6 +33,7 @@ public:
     void condition();
     void block();
     void outputSymbolTable();
+    void outputTAC();
     /*Terminal functions goes here use peek and expect*/
     /*use TokenType:: for token names for example
         expect(TokenType::ASSIGN);   //example function call
