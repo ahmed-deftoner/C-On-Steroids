@@ -20,6 +20,7 @@ class parser
     vector<string> tac;
     fstream tacFile;
     string tempExpr = "";
+    bool init;
 
 public:
     void syntax_error();
@@ -28,7 +29,7 @@ public:
     void readAndPrintAllInput();
     void resetPointer();
     void statements();
-    void expression(bool init);
+    void expression();
     void term();
     void factor();
     void condition();

@@ -46,7 +46,7 @@ void parser::resetPointer()
 }
 
 void parser::condition(){
-    expression(false);
+    expression();
 	switch (_lexer.peek(1).tokenType) {
 		case TokenType::TOKEN_EQUAL:
 		case TokenType::TOKEN_LESS:
@@ -59,7 +59,7 @@ void parser::condition(){
 		default:
 		    syntax_error();
 	}
-	expression(false);
+	expression();
 }
 
 void parser::factor(){
@@ -67,7 +67,8 @@ void parser::factor(){
     case TokenType::TOKEN_IDENTIFIER:
 	case TokenType::TOKEN_VARIABLE:
 	case TokenType::TOKEN_NUMBER:
-        tempExpr = tempExpr + _lexer.peek(1).lexeme;
+        if (init == true)
+            tempExpr = tempExpr + _lexer.peek(1).lexeme;
 		_lexer.getNextToken();
 		break;
     case TokenType::TOKEN_EXECUTE:
@@ -89,7 +90,7 @@ void parser::factor(){
 		break;
 	case TokenType::TOKEN_OPENPARANTHESIS:
 		expect(TokenType::TOKEN_OPENPARANTHESIS);
-		expression(false);
+		expression();
 		expect(TokenType::TOKEN_CLOSEPARANTHESIS);
 	}
 }
@@ -99,13 +100,14 @@ void parser::term(){
     factor();
     while (_lexer.peek(1).tokenType == TokenType::TOKEN_MULTIPLY || _lexer.peek(1).tokenType == TokenType::TOKEN_DIVIDE)
     {
-        tempExpr = tempExpr + _lexer.peek(1).lexeme;
+        if (init == true)
+            tempExpr = tempExpr + _lexer.peek(1).lexeme;
         _lexer.getNextToken();
         factor();
     }
 }
 
-void parser::expression(bool init) {
+void parser::expression() {
     if (_lexer.peek(1).tokenType == TokenType::TOKEN_PLUS || _lexer.peek(1).tokenType == TokenType::TOKEN_MINUS) {
        // cout<<"plus minus\n";
         _lexer.getNextToken();
@@ -114,7 +116,8 @@ void parser::expression(bool init) {
     term();
     while (_lexer.peek(1).tokenType == TokenType::TOKEN_PLUS || _lexer.peek(1).tokenType == TokenType::TOKEN_MINUS)
     {
-        tempExpr = tempExpr + _lexer.peek(1).lexeme;
+        if (init == true)
+            tempExpr = tempExpr + _lexer.peek(1).lexeme;
         _lexer.getNextToken();
         term();
     }
@@ -136,7 +139,7 @@ void parser::statements() {
         if (_lexer.peek(1).tokenType == TokenType::TOKEN_EQUALSIGN)
         {
             expect(TokenType::TOKEN_EQUALSIGN);
-            expression(false);
+            expression();
             tac.push_back(temp + " = " + tempExpr + ";");
             tempExpr = "";
         } else if (_lexer.peek(1).tokenType == TokenType::TOKEN_COLON) {
@@ -146,7 +149,8 @@ void parser::statements() {
             if (_lexer.peek(1).tokenType == TokenType::TOKEN_EQUALSIGN)
             {
                 expect(TokenType::TOKEN_EQUALSIGN);
-                expression(false);
+                expression();
+                cout << tempExpr << endl;
                 tac.push_back(temp + " = " + tempExpr + ";");
                 tempExpr = "";
             }
