@@ -137,6 +137,8 @@ void parser::statements() {
         {
             expect(TokenType::TOKEN_EQUALSIGN);
             expression(false);
+            tac.push_back(temp + " = " + tempExpr + ";");
+            tempExpr = "";
         } else if (_lexer.peek(1).tokenType == TokenType::TOKEN_COLON) {
             expect(TokenType::TOKEN_COLON);
             expect(TokenType::TOKEN_INT);
@@ -145,7 +147,7 @@ void parser::statements() {
             {
                 expect(TokenType::TOKEN_EQUALSIGN);
                 expression(false);
-                tac.push_back(temp + " = " + tempExpr);
+                tac.push_back(temp + " = " + tempExpr + ";");
                 tempExpr = "";
             }
             else if (_lexer.peek(1).tokenType == TokenType::TOKEN_COMMA) {
