@@ -1,7 +1,9 @@
 x = 0;
 y = 0;
 out "negative number entered\n";
+ret 0;
 out "it's 0 man!\n";
+ret 0;
 out "\nThe fibonacci series: ";
 i = 1;
 out x;
@@ -10,6 +12,8 @@ z = x+y;
 x = y;
 y = z;
 i = i+1;
+ret 0;
 out "Enter the number";
 in num;
 result = ;
+ret 0;

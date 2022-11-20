@@ -132,9 +132,11 @@ void parser::statements() {
     case TokenType::TOKEN_RETURN:
 		expect(TokenType::TOKEN_RETURN);
 		expect(TokenType::TOKEN_COLON);
+        init = true;
         expression();
         tac.push_back("ret " + tempExpr + ";");
         tempExpr = "";
+        init = false;
         expect(TokenType::TOKEN_SEMICOLON);
 		break;
     case TokenType::TOKEN_VARIABLE:
