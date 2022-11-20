@@ -246,7 +246,12 @@ void parser::statements() {
 	case TokenType::TOKEN_IF:
 		expect(TokenType::TOKEN_IF);
         expect(TokenType::TOKEN_OPENPARANTHESIS);
+        init = true;
 		condition();
+        lineNo++;
+        tac.push_back("if " + tempExpr + " goto " + to_string(lineNo+2)+";");
+        tempExpr = "";
+        init = false;
         expect(TokenType::TOKEN_CLOSEPARANTHESIS);
 		expect(TokenType::TOKEN_THEN);
 		expect(TokenType::TOKEN_BLOCKOPEN);
