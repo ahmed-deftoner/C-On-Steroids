@@ -19,5 +19,7 @@ goto 10;
 ret 0;
 out "Enter the number";
 in num;
+param num;
+param 0;
 result = ;
 ret 0;

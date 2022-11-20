@@ -29,6 +29,6 @@ calculateFib: int <- function($n: int, $c: int){
 main: int <- function(){
     $num: int;
     "Enter the number" :read: $num; #~ input ~#
-    $result: int = execute: calculateFib($num, 0);
+    $result: int = execute: calculateFib($num,0);
     return:0; #~halt~#
 }

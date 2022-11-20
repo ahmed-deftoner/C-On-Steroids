@@ -101,13 +101,23 @@ void parser::factor(){
 		expect(TokenType::TOKEN_COLON);
 		expect(TokenType::TOKEN_IDENTIFIER);
 		expect(TokenType::TOKEN_OPENPARANTHESIS);
-        while (_lexer.peek(1).tokenType == TokenType::TOKEN_VARIABLE)
+        while (_lexer.peek(1).tokenType != TokenType::TOKEN_CLOSEPARANTHESIS)
         {
-		    expect(TokenType::TOKEN_VARIABLE);
+            init = true;
+		    expression();
+            tac.push_back("param " + tempExpr + ";");
+            tempExpr = "";
+            init = false;
+            lineNo++;
             while (_lexer.peek(1).tokenType == TokenType::TOKEN_COMMA)
             {
                 expect(TokenType::TOKEN_COMMA);
-                expect(TokenType::TOKEN_VARIABLE);
+                init = true;
+                expression();
+                tac.push_back("param " + tempExpr + ";");
+                tempExpr = "";
+                init = false;
+                lineNo++;
             }
         }
         
@@ -121,7 +131,6 @@ void parser::factor(){
 }
 
 void parser::term(){
-   // cout<<"factor\n";
     factor();
     while (_lexer.peek(1).tokenType == TokenType::TOKEN_MULTIPLY || _lexer.peek(1).tokenType == TokenType::TOKEN_DIVIDE)
     {
@@ -134,10 +143,8 @@ void parser::term(){
 
 void parser::expression() {
     if (_lexer.peek(1).tokenType == TokenType::TOKEN_PLUS || _lexer.peek(1).tokenType == TokenType::TOKEN_MINUS) {
-       // cout<<"plus minus\n";
         _lexer.getNextToken();
     }
-    //cout<<"term\n";
     term();
     while (_lexer.peek(1).tokenType == TokenType::TOKEN_PLUS || _lexer.peek(1).tokenType == TokenType::TOKEN_MINUS)
     {
@@ -296,13 +303,14 @@ void parser::statements() {
 		expect(TokenType::TOKEN_COLON);
 		expect(TokenType::TOKEN_IDENTIFIER);
 		expect(TokenType::TOKEN_OPENPARANTHESIS);
-        while (_lexer.peek(1).tokenType == TokenType::TOKEN_VARIABLE)
+        cout<<lineNo;
+        while (_lexer.peek(1).tokenType == TokenType::TOKEN_CLOSEPARANTHESIS)
         {
-		    expect(TokenType::TOKEN_VARIABLE);
+            expression();
             while (_lexer.peek(1).tokenType == TokenType::TOKEN_COMMA)
             {
                 expect(TokenType::TOKEN_COMMA);
-                expect(TokenType::TOKEN_VARIABLE);
+                expression();
             }
         }
 		expect(TokenType::TOKEN_CLOSEPARANTHESIS);
@@ -374,7 +382,6 @@ void parser::outputSymbolTable() {
 }
 
 void parser::outputTAC() {
-    cout<<"hehe\n";
     for (auto x : tac) {
         tacFile << x << endl;
     }
