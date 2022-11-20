@@ -21,6 +21,7 @@ class parser
     fstream tacFile;
     string tempExpr = "";
     bool init;
+    int lineNo;
 
 public:
     void syntax_error();

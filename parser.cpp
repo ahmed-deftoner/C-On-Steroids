@@ -29,6 +29,7 @@ parser::parser(const char filename[])
     _lexer = lexer(filename);
     tacFile.open("source_code.tac", ios::out);
     init = false;
+    lineNo = 0;
 }
 
 void parser::readAndPrintAllInput() //read and print allinputs (provided)
@@ -131,7 +132,9 @@ void parser::statements() {
     case TokenType::TOKEN_RETURN:
 		expect(TokenType::TOKEN_RETURN);
 		expect(TokenType::TOKEN_COLON);
-        expect(TokenType::TOKEN_NUMBER);
+        expression();
+        tac.push_back("ret " + tempExpr + ";");
+        tempExpr = "";
         expect(TokenType::TOKEN_SEMICOLON);
 		break;
     case TokenType::TOKEN_VARIABLE:
