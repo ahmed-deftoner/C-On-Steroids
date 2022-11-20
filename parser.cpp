@@ -152,6 +152,7 @@ void parser::statements() {
     vector<string> vars;
     string temp;
     int x;
+    int tempLine;
     switch (_lexer.peek(1).tokenType) {
     case TokenType::TOKEN_RETURN:
 		expect(TokenType::TOKEN_RETURN);
@@ -330,6 +331,8 @@ void parser::statements() {
 		condition();
         tac.push_back("if " + tempExpr);
         x = tac.size();
+        lineNo++;
+        tempLine = lineNo;
         tempExpr = "";
         init = false;
 		expect(TokenType::TOKEN_CLOSEPARANTHESIS);
@@ -343,7 +346,9 @@ void parser::statements() {
             }
         }
 		expect(TokenType::TOKEN_BLOCKCLOSE);
-        lineNo += 2;
+        lineNo++;
+        tac.push_back("goto " + to_string(tempLine) + ";");
+        lineNo++;
         tac[x - 1] = tac[x - 1].append(" goto " + to_string(lineNo) + ";");
         break;
     default:
