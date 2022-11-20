@@ -1,4 +1,4 @@
-calculateFib: int <- function($n: int, $c: int, $c:int){
+calculateFib: int <- function($n: int, $c: int){
     #~variable declarations, note z is not initialized~#
     $x:int = 0;
     $y:int = 0;
@@ -29,6 +29,6 @@ calculateFib: int <- function($n: int, $c: int, $c:int){
 main: int <- function(){
     $num: int;
     "Enter the number" :read: $num; #~ input ~#
-    $result: int = execute: calculateFib($num);
+    $result: int = execute: calculateFib($num, 0);
     return:0; #~halt~#
 }

@@ -1,6 +1,7 @@
 x = 0;
 y = 0;
 if n<0 goto 5;
+goto 5;
 out "negative number entered\n";
 ret 0;
 out "it's 0 man!\n";

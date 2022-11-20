@@ -250,6 +250,7 @@ void parser::statements() {
 		condition();
         lineNo++;
         tac.push_back("if " + tempExpr + " goto " + to_string(lineNo+2)+";");
+        x = tac.size();
         tempExpr = "";
         init = false;
         expect(TokenType::TOKEN_CLOSEPARANTHESIS);
@@ -264,6 +265,7 @@ void parser::statements() {
             }
             
         }
+        tac.emplace(tac.begin() + x, "goto " + to_string(lineNo) + ";");
 		expect(TokenType::TOKEN_BLOCKCLOSE);
         while (_lexer.peek(1).tokenType == TokenType::TOKEN_ELSE)
         {
