@@ -49,13 +49,36 @@ void parser::resetPointer()
 
 void parser::condition(){
     expression();
+    string eqiuv;
 	switch (_lexer.peek(1).tokenType) {
-		case TokenType::TOKEN_EQUAL:
+		case TokenType::TOKEN_EQUAL: 
+            eqiuv = "==";
+            tempExpr = tempExpr + eqiuv;
+			_lexer.getNextToken();
+			break;
 		case TokenType::TOKEN_LESS:
+            eqiuv = "<";
+            tempExpr = tempExpr + eqiuv;
+			_lexer.getNextToken();
+			break;
 		case TokenType::TOKEN_LESSEQUAL:
+             eqiuv = "<=";
+            tempExpr = tempExpr + eqiuv;
+			_lexer.getNextToken();
+			break;
 		case TokenType::TOKEN_GREATER:
+            eqiuv = ">";
+            tempExpr = tempExpr + eqiuv;
+			_lexer.getNextToken();
+			break;
 		case TokenType::TOKEN_GREATEREQUAL:
+            eqiuv = ">=";
+            tempExpr = tempExpr + eqiuv;
+			_lexer.getNextToken();
+			break;
 		case TokenType::TOKEN_NOTEQUAL:
+            eqiuv = "!=";
+            tempExpr = tempExpr + eqiuv;
 			_lexer.getNextToken();
 			break;
 		default:
@@ -293,7 +316,11 @@ void parser::statements() {
 		expect(TokenType::TOKEN_DO);
 		expect(TokenType::TOKEN_UNTIL);
 		expect(TokenType::TOKEN_OPENPARANTHESIS);
+        init = true;
 		condition();
+        tac.push_back("if " + tempExpr);
+        tempExpr = "";
+        init = false;
 		expect(TokenType::TOKEN_CLOSEPARANTHESIS);
 		expect(TokenType::TOKEN_BLOCKOPEN);
 		while (_lexer.peek(1).tokenType != TokenType::TOKEN_BLOCKCLOSE)

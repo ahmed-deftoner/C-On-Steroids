@@ -1,11 +1,12 @@
 x = 0;
 y = 0;
 out "negative number entered\n";
-ret 0;
+ret <0;
 out "it's 0 man!\n";
-ret 0;
+ret ==0;
 out "\nThe fibonacci series: ";
 i = 1;
+if i-1>=n
 out x;
 out " ";
 z = x+y;
