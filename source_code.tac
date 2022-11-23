@@ -12,7 +12,7 @@ ret 0;
 goto 25;
 out "\nThe fibonacci series: ";
 i = 1;
-if i-1>=n goto 23;24;
+if i-1>=n goto 23;
 out x;
 out " ";
 z = x+y;
