@@ -159,7 +159,7 @@ void parser::statements() {
     vector<string> vars;
     string temp;
     int x;
-    int tempLine;
+    bool isElse = true;
     switch (_lexer.peek(1).tokenType) {
     case TokenType::TOKEN_RETURN:
 		expect(TokenType::TOKEN_RETURN);
@@ -167,9 +167,11 @@ void parser::statements() {
         init = true;
         expression();
         tac.push_back("ret " + tempExpr + ";");
-        lineNo++;
+        tac.push_back("goto ");
+        lineNo+=2;
         tempExpr = "";
         init = false;
+        retunrIndex.push_back(lineNo);
         expect(TokenType::TOKEN_SEMICOLON);
 		break;
     case TokenType::TOKEN_VARIABLE:
@@ -257,6 +259,9 @@ void parser::statements() {
 		condition();
         lineNo++;
         tac.push_back("if " + tempExpr + " goto " + to_string(lineNo+2)+";");
+        lineNo++;
+        tempLine=lineNo;
+        tac.push_back("goto ");
         x = tac.size();
         tempExpr = "";
         init = false;
@@ -272,16 +277,28 @@ void parser::statements() {
             }
             
         }
-        tac.emplace(tac.begin() + x, "goto " + to_string(lineNo) + ";");
+        tac[tempLine - 1] = tac[tempLine - 1] + to_string(lineNo+1) + ";";
 		expect(TokenType::TOKEN_BLOCKCLOSE);
         while (_lexer.peek(1).tokenType == TokenType::TOKEN_ELSE)
         {
+          //  cout<<lineNo<<endl;
+
             expect(TokenType::TOKEN_ELSE);
             if (_lexer.peek(1).tokenType == TokenType::TOKEN_IF)
             {
                 expect(TokenType::TOKEN_IF);
                 expect(TokenType::TOKEN_OPENPARANTHESIS);
+                isElse = false;
+                init = true;
                 condition();
+                lineNo++;
+                tac.push_back("if " + tempExpr + " goto " + to_string(lineNo+2)+";");
+                x = tac.size();
+                lineNo++;
+                tempLine=lineNo;
+                tac.push_back("goto ");
+                tempExpr = "";
+                init = false;
                 expect(TokenType::TOKEN_CLOSEPARANTHESIS);
                 expect(TokenType::TOKEN_THEN);
             }
@@ -295,6 +312,12 @@ void parser::statements() {
                 }
             }
             expect(TokenType::TOKEN_BLOCKCLOSE);
+            if (isElse == false)
+            {
+                tac[tempLine-1] = tac[tempLine-1] + to_string(lineNo+1) + ";";
+                isElse = true;
+            }
+
         }
         
 		break;
@@ -432,6 +455,13 @@ void parser::block()
             }
             
             expect(TokenType::TOKEN_BLOCKCLOSE);
+            for (int i = 0; i < retunrIndex.size() -1; ++i)
+            {
+                cout<<retunrIndex[i]<<lineNo<<endl;
+                int x = retunrIndex[i];
+                tac[x-1] = tac[x-1] + to_string(lineNo) + ";";        
+            }
+            retunrIndex.clear();
             for (auto x: args)
             {
                 symbol_table.push_back(Symbol(types[0],x));         
