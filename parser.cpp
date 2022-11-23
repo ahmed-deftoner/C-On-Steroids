@@ -159,7 +159,6 @@ void parser::statements() {
     vector<string> vars;
     string temp;
     int x;
-    int tempLine;
     switch (_lexer.peek(1).tokenType) {
     case TokenType::TOKEN_RETURN:
 		expect(TokenType::TOKEN_RETURN);
@@ -170,6 +169,7 @@ void parser::statements() {
         lineNo++;
         tempExpr = "";
         init = false;
+        tempLine = lineNo;
         expect(TokenType::TOKEN_SEMICOLON);
 		break;
     case TokenType::TOKEN_VARIABLE:
@@ -272,16 +272,24 @@ void parser::statements() {
             }
             
         }
-        tac.emplace(tac.begin() + x, "goto " + to_string(lineNo) + ";");
+        //tac.emplace(tac.begin() + x, "goto " + to_string(lineNo) + ";");
 		expect(TokenType::TOKEN_BLOCKCLOSE);
         while (_lexer.peek(1).tokenType == TokenType::TOKEN_ELSE)
         {
+          //  cout<<lineNo<<endl;
+
             expect(TokenType::TOKEN_ELSE);
             if (_lexer.peek(1).tokenType == TokenType::TOKEN_IF)
             {
                 expect(TokenType::TOKEN_IF);
                 expect(TokenType::TOKEN_OPENPARANTHESIS);
+                init = true;
                 condition();
+                lineNo++;
+                tac.push_back("if " + tempExpr + " goto " + to_string(lineNo+2)+";");
+                x = tac.size();
+                tempExpr = "";
+                init = false;
                 expect(TokenType::TOKEN_CLOSEPARANTHESIS);
                 expect(TokenType::TOKEN_THEN);
             }

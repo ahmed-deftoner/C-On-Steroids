@@ -22,6 +22,8 @@ class parser
     string tempExpr = "";
     bool init;
     int lineNo;
+    int tempLine;
+
 
 public:
     void syntax_error();
