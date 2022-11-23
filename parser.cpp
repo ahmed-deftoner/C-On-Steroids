@@ -258,6 +258,9 @@ void parser::statements() {
 		condition();
         lineNo++;
         tac.push_back("if " + tempExpr + " goto " + to_string(lineNo+2)+";");
+        lineNo++;
+        tempLine=lineNo;
+        tac.push_back("goto ");
         x = tac.size();
         tempExpr = "";
         init = false;
@@ -273,7 +276,7 @@ void parser::statements() {
             }
             
         }
-        //tac.emplace(tac.begin() + x, "goto " + to_string(lineNo) + ";");
+        tac[tempLine - 1] = tac[tempLine - 1] + to_string(lineNo+1) + ";";
 		expect(TokenType::TOKEN_BLOCKCLOSE);
         while (_lexer.peek(1).tokenType == TokenType::TOKEN_ELSE)
         {
@@ -289,6 +292,9 @@ void parser::statements() {
                 lineNo++;
                 tac.push_back("if " + tempExpr + " goto " + to_string(lineNo+2)+";");
                 x = tac.size();
+                lineNo++;
+                tempLine=lineNo;
+                tac.push_back("goto ");
                 tempExpr = "";
                 init = false;
                 expect(TokenType::TOKEN_CLOSEPARANTHESIS);
@@ -304,6 +310,7 @@ void parser::statements() {
                 }
             }
             expect(TokenType::TOKEN_BLOCKCLOSE);
+            tac[tempLine-1] = tac[tempLine-1] + to_string(lineNo+1) + ";";
         }
         
 		break;
