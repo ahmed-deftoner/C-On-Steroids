@@ -166,10 +166,11 @@ void parser::statements() {
         init = true;
         expression();
         tac.push_back("ret " + tempExpr + ";");
-        lineNo++;
+        tac.push_back("goto ");
+        lineNo+=2;
         tempExpr = "";
         init = false;
-        tempLine = lineNo;
+        retunrIndex.push_back(lineNo);
         expect(TokenType::TOKEN_SEMICOLON);
 		break;
     case TokenType::TOKEN_VARIABLE:
@@ -440,6 +441,13 @@ void parser::block()
             }
             
             expect(TokenType::TOKEN_BLOCKCLOSE);
+            for (int i = 0; i < retunrIndex.size() -1; ++i)
+            {
+                cout<<retunrIndex[i]<<lineNo<<endl;
+                int x = retunrIndex[i];
+                tac[x-1] = tac[x-1] + to_string(lineNo) + ";";        
+            }
+            retunrIndex.clear();
             for (auto x: args)
             {
                 symbol_table.push_back(Symbol(types[0],x));         

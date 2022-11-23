@@ -18,6 +18,7 @@ class parser
     lexer _lexer;
     vector<Symbol> symbol_table;
     vector<string> tac;
+    vector<int> retunrIndex;
     fstream tacFile;
     string tempExpr = "";
     bool init;
